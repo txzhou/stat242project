@@ -1,0 +1,51 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{setspace}
+\doublespacing
+\usepackage{babel}
+\begin{document}
+
+\title{Project Proposal}
+
+
+\author{Jacob Humber, Michael Levy and Tianxia Zhou}
+
+\maketitle
+
+\section*{Overview}
+
+We propose to use Shiny and USGS's dataRetrieval to create a webpage
+where users can interactively visualize water data such as streamflow
+rates, reservoir volume, and groundwater levels. 
+
+
+\section*{Details}
+
+Shiny is an R package to create interactive plots. Shiny applications
+consist of a user-interface script for the front-end and a server
+script for the back-end. We envision a front-end where users can select
+data by place (e.g. stream, groundwater basin), time, and plot type
+and dimensions. We need to explore the details of the data before
+determining precisely what plotting options will be available, but
+we envision some mapping options as well as time series and comparative
+plots. Specifically, we plan to construct visualizations which depict
+the current status the drought within California.  The server side
+of the Shiny app will leverage USGS's dataRetrieval tool to query
+data at the time of the user's request. This will allow us to make
+USGS's extensive database available to users with minimal storage
+requirements on our end. 
+
+The aforementioned R package dataRetrieval contains numerous functions
+which query hydrologic data directly from the USGS's National Water
+Information System (NWIS). The NWIS contains a myriad of data for
+both surface water, groundwater as well as water use. Additionally,
+dataRetrieval provides access to water quality data from the Water
+Quality Portal. 
+\end{document}
