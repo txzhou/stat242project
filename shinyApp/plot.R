@@ -4,7 +4,7 @@ library(reshape2)
 
 rm(list=ls())
 
-df <- read.csv(file = "./shinyApp/clean_data/clean_water_consum.csv")
+df <- read.csv(file = "./clean_data/clean_water_consum.csv")
 
 #First I will subsample the data.  Some data is a double count.  For example Ir=Ir.C+Ir.G (i.e. Irrigation = Irrigation Crops + Irrigation Golf)
 df <- df[ ,c("County", "PS", "Do.self","In", "Ir.C", "Ir.G", "L", "A", "M", "T")]
@@ -16,7 +16,7 @@ names(df.long)[2:3] <- c("Source","Water")
 
 #plot
 gg.wrapper <- function(county.name){
-plot.water <- ggplot(data=df.long[df$County==county.name,], aes(x=Source,y=Water, fill =Source ))+
+plot.water <- ggplot(data=df.long[grep(pattern = county.name, x = tolower(df.long$County)),], aes(x=Source,y=Water, fill =Source ))+
                 geom_bar(stat="identity")+
                 theme_bw()+
                 scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+

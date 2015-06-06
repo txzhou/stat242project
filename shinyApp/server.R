@@ -2,7 +2,9 @@ library(shiny)
 library(maps)
 library(mapdata)
 library(maptools)
-source("functions.R")
+source(file = "plot.R")
+source(file = "functions.R")
+
 
 shinyServer(function(input, output) {
   
@@ -15,6 +17,9 @@ shinyServer(function(input, output) {
         ", y = ", input$plotclick$y, ", \nwhich is in ", 
         latlong2county(
           data.frame(x = input$plotclick$x, y = input$plotclick$y)), "county.")
+
+    print(gg.wrapper(county.name = latlong2county(
+      data.frame(x = input$plotclick$x, y = input$plotclick$y))))
   })
   
 })
