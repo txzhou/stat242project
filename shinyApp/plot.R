@@ -1,8 +1,6 @@
 #This Script will make the ggplot wrapper
-library(ggplot2)
-library(reshape2)
-
-rm(list=ls())
+# rm(list=ls())  
+# ML: It seems very dangerous to me to source files with this command.
 
 df <- read.csv(file = "./clean_data/clean_water_consum.csv")
 
