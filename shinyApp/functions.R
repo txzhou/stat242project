@@ -25,7 +25,45 @@ latlong2county <- function(pointsDF, wantState = FALSE) {
   }
 }
 
-color.map = function() {
+color.map = function(color.variable = 1L) {
+  # adapted from the example in the help doc of "map()" function.
 
-  map(database = "county", regions = "california")
+  # manipulate the water dataset so that we can match it to the map data.
+  df.water.cal = water.consum.data(long = FALSE)
+  df.water.cal$cal.County = sapply(X = strsplit(x = levels(df.water.cal$County), split = ' County'),
+                                   FUN = function(x) x[[1]])
+  df.water.cal$polyname = paste0("california,", tolower(df.water.cal$cal.County))
+
+  # define color buckets
+  colors = c("#fee5d9",
+             "#fcbba1",
+             "#fc9272",
+             "#fb6a4a",
+             "#de2d26",
+             "#a50f15")
+
+  if (color.variable == 1L) {
+    df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Percent, breaks = c(0, 0.01, 1:5*0.02)))
+    leg.txt <- c("<1%", "1-2%", "2-4%", "4-6%", "6-8%", "8-10%")
+    title.txt <- "county consumption: % of total California"
+  } else if (color.variable == 2L) {
+    df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Per.Cap, breaks = c(0:5*2, 40)))
+    leg.txt <- c("<2", "2-4", "4-6", "6-8", "8-10")
+    title.txt <- "per capita % of total California"
+  }
+
+
+  # align data with map definitions by (partial) matching state,county
+  # names, which include multiple polygons for some counties
+  colorsmatched <- df.water.cal$colorBuckets[match(map(database = "county", regions = "california", plot=FALSE)$names,
+                                                   df.water.cal$polyname)]
+
+  # draw map
+  map(database = "county", regions = "california", col = colors[colorsmatched], fill = TRUE, resolution = 0,
+      lty = 0)
+  # the following lines might be useful if we draw the map for the whole U.S.
+  #   map("state", col = "white", fill = FALSE, add = TRUE, lty = 1, lwd = 0.2,
+  #       projection="polyconic")
+  title(title.txt)
+  legend("topright", leg.txt, fill = colors)
 }

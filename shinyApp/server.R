@@ -9,7 +9,9 @@ source(file = "functions.R")
 shinyServer(function(input, output) {
 
   output$theMap <- renderPlot({
-    color.map()
+    # color.variable == 1L or 2L (can include more variables)
+    # see functions.R for detail.
+    color.map(color.variable = 1L)
   })
 
   output$clickcoord <- renderPrint({
@@ -17,7 +19,7 @@ shinyServer(function(input, output) {
         ", y = ", input$plotclick$y, ", \nwhich is in ",
         latlong2county(
           data.frame(x = input$plotclick$x, y = input$plotclick$y)), "county.")
-    })
+  })
 
   output$histogram <- renderPlot({
     gg.wrapper(county.name = latlong2county(
