@@ -6,7 +6,8 @@ shinyUI(pageWithSidebar(
   # Application title
   headerPanel("My App"),
   sidebarPanel(
-    textOutput("clickcoord")
+    textOutput("clickcoord"),
+    plotOutput("histogram")
   ),
 
   # Show a plot of the generated distribution

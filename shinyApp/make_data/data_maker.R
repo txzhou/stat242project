@@ -41,7 +41,13 @@ var.names <- names(df)
 
 df<- df[,var.names[c(1,3,7,grep("*wfrto", tolower(var.names)),26)]]
 
-names(df) <- c("State", "County", "County.Pop", "PS", "Do.self", "In", "Ir","Ir.C", "Ir.G", "L", "A", "M", "T", "T.O", "T.R", "Total", "Do.PS")
+names(df) <- c("State", "County", "County.Pop",
+               "Public.Supply", "Domestic.Self", "Industry",
+               "Irrigation", "Irrigation.Crop", "Irrigation.Golf",
+               "Livestock", "Aquaculture", "Mining",
+               "Thermoelectric", "T.O", "T.R",
+               "Total", "Do.PS")
+
 
 #Numbers to but in the Map
 
