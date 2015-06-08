@@ -47,9 +47,9 @@ color.map = function(color.variable = 1L) {
     leg.txt <- c("<1%", "1-2%", "2-4%", "4-6%", "6-8%", "8-10%")
     title.txt <- "County consumption:\n% of California total"
   } else if (color.variable == 2L) {
-    df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Per.Cap, breaks = c(0:5*2, 40)))
-    leg.txt <- c("<2", "2-4", "4-6", "6-8", "8-10")
-    title.txt <- "per capita % of California total"
+    df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Per.Cap, breaks = c(0, 1, 5, 10, 20, 40)))
+    leg.txt <- c("<1", "1-5", "5-10", "10-20", ">20")
+    title.txt <- "Per Capita Consumption \n (Mgal/day/1000 people)"
   }
 
 
@@ -70,7 +70,6 @@ color.map = function(color.variable = 1L) {
   #cities <- c("^San Francisco", "^West Sacramento", "^Los Angeles", "^San Diego", "^Fresno")
   #city.index <- sapply(cities , function(x){grep(x, us.cities[ ,1])})
   #map.cities(us.cities[city.index, ], country = "CA", label = TRUE, pch = 16, col = "black", cex = 1.5, font = 2)
-  
   title(title.txt)
   legend("topright", leg.txt, fill = colors)
 }

@@ -41,7 +41,11 @@ shinyServer(function(input, output) {
   output$theMap <- renderPlot({
     # color.variable == 1L or 2L (can include more variables)
     # see functions.R for detail.
-    color.map(color.variable = 1L)
+    select.box <- switch(input$metric,
+           "Percent of California Consumption" = 1L,
+           "Per Capita Consumption" = 2L)
+    
+    color.map(color.variable = select.box)
   })
 
   output$countyText <- renderPrint({

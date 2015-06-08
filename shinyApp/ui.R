@@ -20,6 +20,13 @@ shinyUI(fluidPage(
       
       # Print the clickable map
       plotOutput("theMap", height = "400px", clickId = "plotclick"),
+      
+      #Selection box
+      selectInput("metric",
+                  label = "Choose a Water Consumption Metric",
+                  choices = list("Percent of California Consumption",
+                                 "Per Capita Consumption")),
+      
       width = 4
     ),
     
