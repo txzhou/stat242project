@@ -1,5 +1,6 @@
 library(shiny)
 library(maps)
+library(leaflet)
 library(mapdata)
 library(maptools)
 library(Hmisc)
