@@ -19,7 +19,8 @@ shinyUI(fluidPage(
                        textOutput("countyText")),
       
       # Print the clickable map
-      plotOutput("theMap", height = "400px", clickId = "plotclick")
+      plotOutput("theMap", height = "400px", clickId = "plotclick"),
+      width = 4
     ),
     
     mainPanel(

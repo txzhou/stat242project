@@ -5,7 +5,12 @@ library(maptools)
 library(Hmisc)
 library(ggplot2)
 library(reshape2)
-# setwd("Dropbox/Coursework/9_Spring_15/STA242/project/shinyApp/")
+
+#path.app <- "C:/Users/Athena/Desktop/project/shinyApp/"
+#path.toapp <- "C:/Users/Athena/Desktop/project"
+
+#setwd(path.app)
+
 source(file = "plot.R")  # Modified this so it brings df.long into the workspace
 source(file = "functions.R")
 

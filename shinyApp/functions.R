@@ -60,10 +60,17 @@ color.map = function(color.variable = 1L) {
 
   # draw map
   map(database = "county", regions = "california", col = colors[colorsmatched], fill = TRUE, resolution = 0,
-      lty = 0)
+      lty = 1)
   # the following lines might be useful if we draw the map for the whole U.S.
   #   map("state", col = "white", fill = FALSE, add = TRUE, lty = 1, lwd = 0.2,
   #       projection="polyconic")
+  
+  #INCLUDING CITIES
+  #data(us.cities)
+  #cities <- c("^San Francisco", "^West Sacramento", "^Los Angeles", "^San Diego", "^Fresno")
+  #city.index <- sapply(cities , function(x){grep(x, us.cities[ ,1])})
+  
+  map.cities(us.cities[city.index, ], country = "CA", label = TRUE, pch = 16, col = "black", cex = 1.5, font = 2)
   title(title.txt)
   legend("topright", leg.txt, fill = colors)
 }
