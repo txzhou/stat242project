@@ -5,6 +5,8 @@ library(maptools)
 library(Hmisc)
 library(ggplot2)
 library(reshape2)
+library(dataRetrieval)
+library(data.table)
 
 #path.app <- "C:/Users/Athena/Desktop/project/shinyApp/"
 #path.toapp <- "C:/Users/Athena/Desktop/project"
@@ -13,6 +15,7 @@ library(reshape2)
 
 source(file = "plot.R")  # Modified this so it brings df.long into the workspace
 source(file = "functions.R")
+source("readUSGSData.R")
 
 shinyServer(function(input, output) {
   
@@ -57,4 +60,18 @@ shinyServer(function(input, output) {
     renderPlot(
       gg.wrapper(county.name = theCounty())
   )
+  
+  
+  # Spatial pattern is weird; sites do exist in CV. Address this later.
+  output$siteMap <- renderLeaflet({
+    leaflet(data = sites) %>% 
+      addProviderTiles("Stamen.TonerLite") %>%
+      addProviderTiles("MapQuestOpen.Aerial", 
+                       options = providerTileOptions(opacity = .5)) %>%
+      addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, radius = 1)
+    # popup = ~siteNumber, 
+  })
+  
+  output$mapClick = renderPrint(cat("That's site #",
+                                    input$siteMap_marker_click$id))
 })

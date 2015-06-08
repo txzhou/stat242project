@@ -19,7 +19,7 @@ shinyUI(fluidPage(
                        textOutput("countyText")),
       
       # Print the clickable map
-      plotOutput("theMap", height = "400px", clickId = "plotclick"),
+      plotOutput("theMap", height = "400px", click = "plotclick"),
       
       #Selection box
       selectInput("metric",
@@ -33,8 +33,10 @@ shinyUI(fluidPage(
     mainPanel(
       # Show a plot of the generated distribution
       conditionalPanel("output.badCounty == 0",
-                       plotOutput("useagePlot")
-                       )
+                       plotOutput("useagePlot")),
+      
+      textOutput("mapClick"),
+      leafletOutput("siteMap")
     )
   )
 ))
