@@ -25,3 +25,28 @@ plot.surface = function(siteNumber = "11454000",
   legend("topleft", legend = c("ft", "ft3/s"),
          col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
 }
+
+
+plot.discharge = function(siteNumber = "09423350",
+                          parameterCd = "00060") {
+  require(dataRetrieval)
+
+  data = readNWISdv(siteNumber,
+                    parameterCd)
+
+  data = renameNWISColumns(data)
+
+  stopifnot("Flow" %in% names(data))
+
+  variableInfo = attr(data, "variableInfo")
+  siteInfo = attr(data, "siteInfo")
+
+  require(ggplot2)
+  plot = ggplot(data = data, aes(x = Date, y = Flow)) +
+    geom_line() +
+    xlab("Date") +
+    ylab(variableInfo$parameter_desc) +
+    ggtitle(siteInfo$station_nm)
+
+  return(plot)
+}

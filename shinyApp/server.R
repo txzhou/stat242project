@@ -8,18 +8,27 @@ packages.list = c("shiny",
                   "reshape2",
                   "dataRetrieval",
                   "data.table")
+
 for (p in packages.list) {
   if (!(p %in% rownames(installed.packages())))
-    install.packages(p)
-  require(p)
+    install.packages(pkgs = p)
 }
 
 if (!("leaflet" %in% rownames(installed.packages()))) {
   require("devtools")
   devtools::install_github("rstudio/leaflet")
-  install.packages("leaflet")
 }
-require("leaflet")
+
+library(shiny)
+library(maps)
+library(leaflet)
+library(mapdata)
+library(maptools)
+library(Hmisc)
+library(ggplot2)
+library(reshape2)
+library(dataRetrieval)
+library(data.table)
 
 #path.app <- "C:/Users/Athena/Desktop/project/shinyApp/"
 #path.toapp <- "C:/Users/Athena/Desktop/project"
@@ -29,7 +38,8 @@ require("leaflet")
 # source files ####
 source(file = "plot.R")  # Modified this so it brings df.long into the workspace
 source(file = "functions.R")
-source("readUSGSData.R")
+source(file = "readUSGSData.R")
+source(file = "USGSplot.R")
 
 shinyServer(function(input, output) {
 
@@ -88,4 +98,9 @@ shinyServer(function(input, output) {
 
   output$mapClick = renderPrint(cat("That's site #",
                                     input$siteMap_marker_click$id))
+
+  output$sitePlot = renderPlot({
+    plot.discharge(siteNumber = input$siteMap_marker_click$id)
+  })
+
 })
