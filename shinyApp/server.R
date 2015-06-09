@@ -56,7 +56,7 @@ shinyServer(function(input, output) {
 
   # Spatial pattern is weird; sites do exist in CV. Address this later.
   output$siteMap <- renderLeaflet({
-    leaflet(data = sites) %>%
+    leaflet(data = goodSurfaceData) %>%
       addProviderTiles("Stamen.TonerLite") %>%
       addProviderTiles("MapQuestOpen.Aerial",
                        options = providerTileOptions(opacity = .5)) %>%
