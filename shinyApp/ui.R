@@ -1,4 +1,13 @@
 library(shiny)
+library(maps)
+library(leaflet)
+library(mapdata)
+library(maptools)
+library(Hmisc)
+library(ggplot2)
+library(reshape2)
+library(dataRetrieval)
+library(data.table)
 
 # Define UI for application
 shinyUI(fluidPage(
@@ -26,11 +35,11 @@ shinyUI(fluidPage(
                   label = "Choose a Water Consumption Metric",
                   choices = list("Percent of California Consumption",
                                  "Per Capita Consumption")),
-      
+
       selectInput("year",
                   label = "Choose a Year",
                   choices = list(2000,2005,2010)),
-      
+
       width = 4
     ),
 
