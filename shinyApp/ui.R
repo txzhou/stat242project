@@ -27,6 +27,10 @@ shinyUI(fluidPage(
                   choices = list("Percent of California Consumption",
                                  "Per Capita Consumption")),
       
+      selectInput("year",
+                  label = "Choose a Year",
+                  choices = list(2000,2005,2010)),
+      
       width = 4
     ),
     

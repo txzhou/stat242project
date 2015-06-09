@@ -3,9 +3,12 @@
 
 # We want to build this data.frame once, not on each call to gg.wrapper.
 water.consum.data <- function (select.variables = NULL,
-                               long) {
-  df <- read.csv(file = "./clean_data/clean_water_consum.csv")
+                               long,
+                            
+                               year=2010) {
+  df <- read.csv(file = paste0("./clean_data/ca_",year,".csv"))
 
+  
   if (!is.null(select.variables))
     df <- df[ , select.variables]
 
@@ -19,14 +22,17 @@ water.consum.data <- function (select.variables = NULL,
   }
 }
 
-df.long <- water.consum.data(
-  select.variables = c("County", "Public.Supply", "Domestic.Self", "Industry",
-                       "Irrigation.Crop", "Irrigation.Golf", "Livestock",
-                       "Aquaculture", "Mining","Thermoelectric"),
-  long = TRUE)
+
 
 #plot
-gg.wrapper <- function(county.name, theDF = df.long){
+gg.wrapper <- function(county.name, year.gg){
+  
+  theDF <- water.consum.data(
+    select.variables = c("County", "Public.Supply", "Domestic.Self", "Industry",
+                         "Irrigation", "Livestock",
+                         "Aquaculture", "Mining","Thermoelectric"),
+    long = TRUE,
+    year = year.gg)  
   #First I will subsample the data.  Some data is a double count.  For example Ir=Ir.C+Ir.G (i.e. Irrigation = Irrigation Crops + Irrigation Golf)
   
   plot.water <- ggplot(data=theDF[grep(pattern = county.name, x = tolower(theDF$County)),], aes(x=Source,y=Water, fill =Source ))+

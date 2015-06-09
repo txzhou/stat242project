@@ -45,7 +45,7 @@ shinyServer(function(input, output) {
            "Percent of California Consumption" = 1L,
            "Per Capita Consumption" = 2L)
     
-    color.map(color.variable = select.box)
+    color.map(color.variable = select.box, year.map = as.numeric(input$year))
   })
 
   output$countyText <- renderPrint({
@@ -55,6 +55,7 @@ shinyServer(function(input, output) {
   
   output$useagePlot = 
     renderPlot(
-      gg.wrapper(county.name = theCounty())
+      gg.wrapper(county.name = theCounty(), year.gg = as.numeric(input$year))
   )
 })
+

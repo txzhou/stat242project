@@ -25,13 +25,17 @@ latlong2county <- function(pointsDF, wantState = FALSE) {
   }
 }
 
-color.map = function(color.variable = 1L) {
+color.map = function(color.variable = 1L, year.map) {
   # adapted from the example in the help doc of "map()" function.
 
   # manipulate the water dataset so that we can match it to the map data.
-  df.water.cal = water.consum.data(long = FALSE)
+  df.water.cal = water.consum.data(long = FALSE, year= year.map)
+  if(year.map == 2010){
   df.water.cal$cal.County = sapply(X = strsplit(x = levels(df.water.cal$County), split = ' County'),
                                    FUN = function(x) x[[1]])
+  } else {
+    df.water.cal$cal.County=df.water.cal$County
+  }
   df.water.cal$polyname = paste0("california,", tolower(df.water.cal$cal.County))
 
   # define color buckets
