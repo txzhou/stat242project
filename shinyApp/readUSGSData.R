@@ -13,3 +13,4 @@ sites$long = as.numeric(as.character(sites$long))
 
 # To keep the data manageable, for now:
 sites = sites[sample(nrow(sites), 1e3), ]
+
