@@ -1,29 +1,39 @@
+plot.USGS = function(siteNumber) {
+  plot1 = try(plot.discharge(siteNumber = siteNumber))
+  cat(class(plot1))
+  if ((class(plot1)[[1]] != "try-error")) {
+    return(plot1)
+  }
+
+  plot2 = try(plot.surface(siteNumber = siteNumber))
+  cat(class(plot2))
+  return(plot2)
+}
+
 plot.surface = function(siteNumber = "11454000",
                                startDate = "2010-01-01",
                                endDate = "2010-12-31") {
   require(dataRetrieval)
 
   surfaceData = readNWISmeas(siteNumber)
+  stopifnot("measurement_dt" %in% names(surfaceData))
   stopifnot("discharge_va" %in% names(surfaceData))
   stopifnot("gage_height_va" %in% names(surfaceData))
+
+  siteInfo = attr(surfaceData, "siteInfo")
 
   surfaceData = surfaceData[surfaceData$measurement_dt >= as.POSIXct(startDate) &
                               surfaceData$measurement_dt <= as.POSIXct(endDate), ]
 
-  siteInfo = attr(surfaceData, "siteInfo")
+  require(ggplot2)
+  plot = ggplot(data = surfaceData, aes(x = measurement_dt, y = discharge_va)) +
+    geom_point() +
+    geom_line() +
+    xlab("Date") +
+    ylab("Discharge, cubic feet per second") +
+    ggtitle(siteInfo$station_nm)
 
-  par(mar=c(5,5,5,5)) #sets the size of the plot window
-  plot(surfaceData$measurement_dt, surfaceData$gage_height_va,
-       ylab="Gage Height, feet",xlab="" )
-  par(new=TRUE)
-  plot(surfaceData$measurement_dt, surfaceData$discharge_va,
-       col="red",type="l",xaxt="n",yaxt="n",xlab="",ylab="",axes=FALSE
-  )
-  axis(4,col="red",col.axis="red")
-  mtext("Discharge, cubic feet per second",side=4,line=3,col="red")
-  title(paste(siteInfo$station_nm))
-  legend("topleft", legend = c("ft", "ft3/s"),
-         col=c("black","red"),lty=c(NA,1),pch=c(1,NA))
+  return(plot)
 }
 
 
@@ -46,7 +56,7 @@ plot.discharge = function(siteNumber = "09423350",
     geom_line() +
     xlab("Date") +
     ylab(variableInfo$parameter_desc) +
-    ggtitle(siteInfo$station_nm)
+    ggtitle(paste0("Daily warter discharge at: ", siteInfo$station_nm))
 
   return(plot)
 }
