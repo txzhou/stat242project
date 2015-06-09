@@ -39,7 +39,7 @@ gg.wrapper <- function(county.name, year.gg){
     geom_bar(stat="identity")+
     theme_bw()+
     scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+
-    scale_x_discrete("",labels=c("Public Supply", "Domestic-Self", "Industry", "Irrigation-Crop", "Irrigation-Golf", "Livestock", "Aquaculture", "Mining","Thermoelectric"))+
+    scale_x_discrete("",labels=c("Public Supply", "Domestic-Self", "Industry", "Irrigation", "Livestock", "Aquaculture", "Mining","Thermoelectric"))+
     coord_flip()+
     guides(fill=FALSE)+
     ggtitle(paste("Consumption of Water by Sector:", simpleCap(county.name)))+
