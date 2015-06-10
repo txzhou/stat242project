@@ -1,9 +1,8 @@
 # Downloaded from http://waterdata.usgs.gov/nwis/inventory
 # fread saves 2.5s over read.table on just California sites.
-sites = fread("../raw_data/inventory",
-              skip = 26, header = TRUE)[-1, ] 
-setnames(sites, c("siteNumber", "siteName", "siteType", 
-                  "lat", "long", "agency", "datum"))
+sites = fread("../raw_data/inventory", header = TRUE)[-1, ] 
+setnames(sites, c("agency", "siteNumber", "siteName", "siteType", 
+                  "lat", "long", "coordAccuracy", "datum"))
 
 # Remove 44 problematic rows where lat/long are missing
 sites = sites[!is.na(as.numeric(as.character(sites$lat))), ]
@@ -33,3 +32,18 @@ if(FALSE) {
   saveRDS(goodSurfaceData, "clean_data/goodSurfaceSites.RDS")
 }
 goodSurfaceData = readRDS("clean_data/goodSurfaceSites.RDS")
+
+
+gwLevels = readRDS("clean_data/gwLevels.RDS")
+gwSites = sites[sites$siteNumber %in% gwLevels$siteNumber, ]
+
+if(FALSE) {
+tmp = readNWISgwl(gwSites$siteNumber[1:100])
+
+# gwSelection = unique(tmp$site_no)[1:2]
+
+gwData2 = try(readNWISgwl(gwSelection))
+# Since the above line isn't working...
+gwData = tmp[tmp$site_no %in% unique(tmp$site_no)[1:10], ]
+gwData$siteName = gwSites$siteName[match(gwData$site_no, gwSites$siteNumber)]
+}
