@@ -48,16 +48,18 @@ shinyUI(fluidPage(
       conditionalPanel("output.badCounty == 0",
                        plotOutput("useagePlot")),
       
+
+      leafletOutput("siteMap"),
       conditionalPanel("!is.na(output.mapClick)",
                        plotOutput("sitePlot")),
       
-      textOutput("mapClick"),
-      leafletOutput("siteMap"),
+#      textOutput("mapClick"),
       
       leafletOutput("gwMap"),
-      actionButton("clear", "Clear plot, except last-clicked well"),
       textOutput("wellsInfo"),
-      plotOutput("GWPlot")
+      plotOutput("GWPlot"),
+      actionButton("clear", "Clear plot, except last-clicked well")
+
     )
   )
 ))

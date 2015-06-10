@@ -62,13 +62,16 @@ shinyServer(function(input, output) {
                        popup = ~siteName)
   })
 
+  observe({
+    if(!is.null(input$siteMap_marker_click$id))
+      output$sitePlot = renderPlot({
+        plot.discharge(siteNumber = input$siteMap_marker_click$id)
+      })
+    })
+
   output$mapClick = renderPrint(cat("That's site #",
                                     input$siteMap_marker_click$id))
-
-  output$sitePlot = renderPlot({
-    plot.discharge(siteNumber = input$siteMap_marker_click$id)
-  })
-
+  
   output$gwMap <- renderLeaflet({
     leaflet(data = gwSites) %>%
       addProviderTiles("Stamen.TonerLite") %>%

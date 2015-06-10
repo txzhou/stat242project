@@ -57,13 +57,15 @@ plot.discharge = function(siteNumber,
   siteInfo = attr(data, "siteInfo")
 
   require(ggplot2)
-  plot = ggplot(data = data, aes(x = Date, y = Flow)) +
+ ggplot(data = data, aes(x = Date, y = Flow)) +
     geom_line() +
     xlab("Date") +
     ylab(variableInfo$parameter_desc) +
+    theme_bw() +
+    scale_y_log10() +
     ggtitle(paste0("Daily warter discharge at: ", siteInfo$station_nm))
 
-  return(plot)
+#  return(plot)
 }
 
 gwPlot = function(siteNum)
