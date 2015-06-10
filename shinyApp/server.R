@@ -58,8 +58,8 @@ shinyServer(function(input, output) {
       addProviderTiles("Stamen.TonerLite") %>%
       addProviderTiles("MapQuestOpen.Aerial",
                        options = providerTileOptions(opacity = .5)) %>%
-      addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, radius = 1)
-    # popup = ~siteNumber,
+      addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, radius = 1,
+                       popup = ~siteName)
   })
 
   output$mapClick = renderPrint(cat("That's site #",
@@ -75,10 +75,34 @@ shinyServer(function(input, output) {
       addProviderTiles("MapQuestOpen.Aerial",
                        options = providerTileOptions(opacity = .5)) %>%
       addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, 
-                       color = "red", radius = 1)
+                       color = "red", radius = 1, popup = ~siteNumber)
   })
   
-  output$GWPlot = renderPlot({
-    gwPlot(input$gwMap_marker_click$id)
+  theGWSites = reactiveValues()
+  theGWSites$sites = character(0)
+
+  # On gw-map click, if well isn't in the vector to be plotted, add it.
+  observe({
+    if(!input$gwMap_marker_click$id %in% theGWSites$sites) {
+      nextWell <- isolate(input$gwMap_marker_click$id)
+      if(!nextWell %in% theGWSites$sites)
+        isolate(theGWSites$sites <- c(theGWSites$sites, nextWell))
+    }
   })
+
+  observe({
+    if(input$clear > 0) {
+      theGWSites$sites = ""
+    }
+  })
+
+  output$wellsInfo =
+    renderPrint(cat("Plotting wells:", theGWSites$sites, sep = "\n"))
+
+  output$GWPlot = renderPlot({
+    gwPlot(theGWSites$sites)
+  })
+  
 })
+
+

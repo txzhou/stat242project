@@ -55,6 +55,8 @@ shinyUI(fluidPage(
       leafletOutput("siteMap"),
       
       leafletOutput("gwMap"),
+      actionButton("clear", "Clear plot, except last-clicked well"),
+      textOutput("wellsInfo"),
       plotOutput("GWPlot")
     )
   )

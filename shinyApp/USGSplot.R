@@ -63,11 +63,11 @@ plot.discharge = function(siteNumber = "09423350",
 
 gwPlot = function(siteNum)
 {
-  ggplot(gwLevels[gwLevels$siteNumber == siteNum, ], 
+  ggplot(gwLevels[gwLevels$siteNumber %in% siteNum, ], 
          aes(x = date, 
              # y = log10(level), 
-             y = level)) +
-#           color = siteNumber)) +
+             y = level,
+             color = siteNumber)) +
     scale_y_reverse() + 
     scale_x_date(limits = c(as.Date("2011-10-01"), Sys.Date())) +
     geom_line() +
