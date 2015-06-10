@@ -21,20 +21,20 @@ shinyUI(
       
       fluidRow(
         column(5,
-               #Selection box
-               selectInput("metric",
-                           label = "Choose a Water Consumption Metric",
-                           choices = list("Percent of California Consumption",
-                                          "Per Capita Consumption")),
-               
+               #Selection box              
+               helpText("Choose a year, then click on a county for use information."),
+
                selectInput("year",
                            label = "Choose a Year",
                            choices = list(2000,2005,2010)),
 
-               helpText("Click on a county for consumption by sector for that county in the selected year."),
-               
                # Print the clickable map
                plotOutput("theMap", height = "400px", click = "plotclick"),
+               
+               selectInput("metric",
+                           label = "Color the map by:",
+                           choices = list("Percent of California Consumption",
+                                          "Per Capita Consumption")),
                
                textOutput("badCounty")  # This line has to be present for the
                # conditionalPanel()s to work. I have no idea why. Maybe badCounty has

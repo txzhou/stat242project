@@ -48,10 +48,12 @@ shinyServer(function(input, output) {
     
   })
   
-  output$useagePlot =
-    renderPlot(
-      gg.wrapper(county.name = theCounty(), year.gg = as.numeric(input$year))
-    )
+  observe({
+    output$useagePlot =
+      renderPlot(
+        gg.wrapper(county.name = theCounty(), year.gg = as.numeric(input$year))
+      )
+  })
   
   output$siteMap <- renderLeaflet({
     leaflet(data = goodSurfaceData) %>%

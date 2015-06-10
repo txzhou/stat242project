@@ -86,7 +86,7 @@ color.map = function(color.variable = 1L, year.map) {
   } else if (color.variable == 2L) {
     df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Per.Cap, breaks = c(0, 1, 5, 10, 20, 40)))
     leg.txt <- c("<1", "1-5", "5-10", "10-20", ">20")
-    title.txt <- "Per Capita Consumption \n (Mgal/day/1000 people)"
+    title.txt <- "Per Capita Consumption \n (kgal/day/person)"
   }
 
 
