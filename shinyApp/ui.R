@@ -17,7 +17,7 @@ shinyUI(
     
     tabPanel(
       "Use by county",
-      h1("Water uses"),
+      h1("Water use"),
       
       fluidRow(
         column(5,
@@ -113,8 +113,7 @@ shinyUI(
       
       #        column(6, 
       #               offset = 1,
-      plotOutput("GWPlot"),
-      actionButton("clear", "Clear plot, except last-clicked well")
+      plotOutput("GWPlot")
       #        )
       
       #      textOutput("wellsInfo"),
