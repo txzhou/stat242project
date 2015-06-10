@@ -56,15 +56,14 @@ gg.wrapper <- function(county.name, year.gg){
     theme_bw()+
 #    scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+
     scale_x_discrete("") +
-    scale_y_log10("Fresh Water Withdrawn (acre-feet/year)") +
+    scale_y_log10("Fresh Water Use (acre-feet/year)") +
 #                  limits = c(1, max(theDF$Water) + .05 * max(theDF$Water))) +
   scale_fill_manual(values = col) +
   geom_text(aes(label = lab, y = ifelse(Water < 2, 1, Water / 2))) +
     coord_flip()+
     guides(fill=FALSE)+
-    ggtitle(paste("Consumption of Water by Sector for",
-                  simpleCap(county.name), "County"))+
-    theme(# plot.title = element_text(size=18, face="bold"), #Don't adjust text size. If you increase it will cut off San Luis Obispo County
+    ggtitle(paste(simpleCap(county.name), "County"))+
+    theme(plot.title = element_text(size=18, face="bold"), #Don't adjust text size. If you increase it will cut off San Luis Obispo County
           axis.text.y = element_text(size = 15),
           axis.text.x = element_text(size = 12),
           axis.title.x = element_text(size = 15))

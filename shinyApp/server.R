@@ -67,9 +67,6 @@ shinyServer(function(input, output) {
       })
     })
 
-  output$mapClick = renderPrint(cat("That's site #",
-                                    input$siteMap_marker_click$id))
-  
   output$gwMap <- renderLeaflet({
     leaflet(data = gwSites) %>%
       addProviderTiles("Esri.WorldTopoMap") %>%
