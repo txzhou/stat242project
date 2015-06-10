@@ -8,6 +8,7 @@ library(ggplot2)
 library(reshape2)
 library(dataRetrieval)
 library(data.table)
+library(RColorBrewer)
 
 # Define UI for application
 shinyUI(
