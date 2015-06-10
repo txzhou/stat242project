@@ -1,6 +1,58 @@
-%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
-\documentclass[english]{article}
+\batchmode
+\makeatletter
+\def\input@path{{E:/Desktop/project/write_up//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
@@ -9,17 +61,20 @@
 \usepackage{setspace}
 \doublespacing
 \usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
 \title{Project: Visualization of California Water}
 
 \maketitle
 \begin{center}
-Git Repository: https://z109620@bitbucket.org/z109620/project.git
+Bit Bucket Repository: https://z109620@bitbucket.org/z109620/project.git
 \par\end{center}
 
 \noindent \begin{center}
-Visualization: 
+R code to access our Visualization: require(shiny); runGitHub( repo
+= \textquotedbl{}stat242project\textquotedbl{}, username = \textquotedbl{}txzhou\textquotedbl{},
+subdir = \textquotedbl{}shinyApp\textquotedbl{})
 \par\end{center}
 
 \noindent \begin{center}
@@ -29,19 +84,25 @@ Jacob Humber, Michael Levy and Tianxia Zhou
 
 \section{Introduction}
 
-California has been experiencing a drought since the onset of 2012.
-Over this time LIST BAD SHIT THAT HAPPENED. In an effort to convey
-the magnitude of this persistent drought the United States Geological
-Survey (USGS) generated an interesting visualization\footnote{The USGS visualization: http://cida.usgs.gov/ca\_drought/}.
+Since the onset of 2012, California has been experiencing one of its
+worst droughts in over a thousand years\footnote{http://www.nytimes.com/2015/05/03/opinion/sunday/the-end-of-california.html?\_r=0}.
+For the year of 2014 alone the agricultural losses as a results of
+the drought totaled 2.2 billion dollars as well as a loss of 17,000
+agricultural jobs \footnote{http://www.wsj.com/articles/drought-will-cost-california-2-2-billion-in-losses-costs-this-year-1405452120}.
+In an effort to convey the magnitude of this persistent drought the
+United States Geological Survey (USGS) generated an interesting visualization\footnote{The USGS visualization: http://cida.usgs.gov/ca\_drought/}.
 While this visualization helps to illuminate the magnitude of the
 California drought, it focuses almost exclusively on surface water
 reservoir levels. Surface water reservoir levels only tell part of
 the story of the California drought. Clearly, an thorough understanding
 of California water consumption, stream flows, the depth of ground
 water wells are all important. The current project, therefore, will
-generate visualizations\footnote{Our visualization: INSERT THE ADDRESS TO OUR VISUALIZATION}
-which will depict each of these aforementioned water metrics and is
-therefore meant to compliment the existing USGS visualization. 
+generate visualizations\footnote{Our visualization: To access the visualization the following lines
+of code must be executed: require(shiny); runGitHub( repo = \textquotedbl{}stat242project\textquotedbl{},
+username = \textquotedbl{}txzhou\textquotedbl{}, subdir = \textquotedbl{}shinyApp\textquotedbl{}).
+Alternatively, the shiny app can be run by cloning the repository
+locally on your own machine.} which will depict each of these aforementioned water metrics and
+is therefore meant to compliment the existing USGS visualization. 
 
 All visualizations within the project are generated with the R package
 shiny. For a proficient R user utilizing the shiny package is relatively
@@ -56,7 +117,7 @@ first depicts California water consumption by county and sector. The
 next depicts discharge rates of streams and rivers. Finally, the last
 visualization depicts the ground water depth of wells. In what follows,
 we will discuss each of these visualization separately within sections
-2, 3 and 4. 
+2, 3 and 4. All R scripts are contained in the Appendix below.
 
 
 \section{Water Consumption}
@@ -80,16 +141,16 @@ data on this website is to pay \$30 a month, which is a lot of money
 for a group of graduate students.
 
 The code to generate this visualization is contained the in R scripts
-plot.R and functions.R. The color.map function within functions.R
-generates the plot of California. This is essentially a wrapper of
-the map function from R's maps package. Upon clicking on a county,
-a graph of the consumption by sector for that county is generated
-with the ggplot wrapper gg.wrapper. Notice that when a users clicks
-the map, longitude and latitude coordinates are passed to server.R,
-however we don't want to pass longitude and latitude coordinates to
-the gg.wrapper, we want to pass a county name. Consequently, we must
-convert these longitude and latitude coordinates to a county. This
-is done with the latlong2county function within functions.R\footnote{The latlong2county function draws heavily from the following StackOverflow
+plot.R and functions.R in the Appendix. The color.map function within
+functions.R generates the plot of California. This is essentially
+a wrapper of the map function from R's maps package. Upon clicking
+on a county, a graph of the consumption by sector for that county
+is generated with the ggplot wrapper gg.wrapper. Notice that when
+a users clicks the map, longitude and latitude coordinates are passed
+to server.R, however we don't want to pass longitude and latitude
+coordinates to the gg.wrapper, we want to pass a county name. Consequently,
+we must convert these longitude and latitude coordinates to a county.
+This is done with the latlong2county function within functions.R\footnote{The latlong2county function draws heavily from the following StackOverflow
 thread: http://stackoverflow.com/questions/13316185 }.
 
 
@@ -138,11 +199,7 @@ monitored by the USGS.
 
 The approach used to generate the ground water visualization is very
 similar to the stream flow visualization. As above both, the leafet
-and dataRetrieval packages are utilized. However, one additional feature
-of this visualization is that for each successive on a well sites
-the well depth accumulate on the plot. This is helpful for comparisons
-across wells. The action bottom below the plot, clears all but the
-last plot. 
+and dataRetrieval packages are utilized. 
 
 
 \section{Conclusion}
@@ -163,31 +220,576 @@ these two approaches.
 
 ui.R
 
-<<>>=
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(shiny)}
+\hlkwd{library}\hlstd{(maps)}
+\hlkwd{library}\hlstd{(leaflet)}
+\hlkwd{library}\hlstd{(mapdata)}
+\hlkwd{library}\hlstd{(maptools)}
+\hlkwd{library}\hlstd{(Hmisc)}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{library}\hlstd{(reshape2)}
+\hlkwd{library}\hlstd{(dataRetrieval)}
+\hlkwd{library}\hlstd{(data.table)}
+\hlkwd{library}\hlstd{(RColorBrewer)}
+
+\hlcom{# Define UI for application}
+\hlkwd{shinyUI}\hlstd{(}
+  \hlkwd{navbarPage}\hlstd{(}
+    \hlstr{"California Water Use"}\hlstd{,}
+
+    \hlkwd{tabPanel}\hlstd{(}
+      \hlstr{"Use by county"}\hlstd{,}
+      \hlkwd{h1}\hlstd{(}\hlstr{"Water use"}\hlstd{),}
+
+      \hlkwd{fluidRow}\hlstd{(}
+        \hlkwd{column}\hlstd{(}\hlnum{5}\hlstd{,}
+               \hlcom{#Selection box}
+               \hlkwd{selectInput}\hlstd{(}\hlstr{"metric"}\hlstd{,}
+                           \hlkwc{label} \hlstd{=} \hlstr{"Choose a Water Consumption Metric"}\hlstd{,}
+                           \hlkwc{choices} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"Percent of California Consumption"}\hlstd{,}
+                                          \hlstr{"Per Capita Consumption"}\hlstd{)),}
+
+               \hlkwd{selectInput}\hlstd{(}\hlstr{"year"}\hlstd{,}
+                           \hlkwc{label} \hlstd{=} \hlstr{"Choose a Year"}\hlstd{,}
+                           \hlkwc{choices} \hlstd{=} \hlkwd{list}\hlstd{(}\hlnum{2000}\hlstd{,}\hlnum{2005}\hlstd{,}\hlnum{2010}\hlstd{)),}
+
+               \hlkwd{helpText}\hlstd{(}\hlstr{"Click on a county for consumption by 
+					sector for that county in the selected year."}\hlstd{),}
+
+               \hlcom{# Print the clickable map}
+               \hlkwd{plotOutput}\hlstd{(}\hlstr{"theMap"}\hlstd{,} \hlkwc{height} \hlstd{=} \hlstr{"400px"}\hlstd{,} \hlkwc{click} \hlstd{=} \hlstr{"plotclick"}\hlstd{),}
+
+               \hlkwd{textOutput}\hlstd{(}\hlstr{"badCounty"}\hlstd{)}  \hlcom{# This line has to be present for the}
+               \hlcom{# conditionalPanel()s to work. I have no idea why. Maybe badCounty has}
+               \hlcom{# to be evaluated before the JS test is called???}
+
+
+        \hlstd{),}
+
+        \hlkwd{column}\hlstd{(}\hlnum{6}\hlstd{,}
+               \hlkwd{helpText}\hlstd{(}\hlstr{"California is a geographically diverse state with widely varying 
+                economies and population densities across its counties. Here you 
+                can explore how much water each county uses and what they use it for."}\hlstd{),}
+
+               \hlcom{# offset = 1,}
+               \hlcom{# Show a plot of the generated distribution}
+               \hlkwd{conditionalPanel}\hlstd{(}\hlstr{"output.badCounty == 0"}\hlstd{,}
+                                \hlkwd{plotOutput}\hlstd{(}\hlstr{"useagePlot"}\hlstd{))}
+        \hlstd{)}
+      \hlstd{)}
+    \hlstd{),}
+
+    \hlkwd{tabPanel}\hlstd{(}
+      \hlstr{"Surface water flow"}\hlstd{,}
+      \hlkwd{h1}\hlstd{(}\hlstr{"Surface water"}\hlstd{),}
+
+      \hlkwd{fluidRow}\hlstd{(}
+        \hlkwd{column}\hlstd{(}\hlnum{5}\hlstd{,} \hlkwd{leafletOutput}\hlstd{(}\hlstr{"siteMap"}\hlstd{)),}
+        \hlkwd{column}\hlstd{(}\hlnum{6}\hlstd{,}
+               \hlkwd{helpText}\hlstd{(}\hlstr{"Surface water provides some of California's water supply. It is 
+               stored in massive manmade reservoirs on almost all the major rivers and
+               in the natural reservoir of high alpine snowpack in the Sierra
+               Nevada mountains. In the current drought, snowpack has been far 
+               less than normal, which means less runoff to fill the reservoirs, 
+               the levels of which have dropped dramatically."}\hlstd{),}
+               \hlkwd{br}\hlstd{(),}
+               \hlkwd{helpText}\hlstd{(}\hlstr{"The map to left shows US Geological Survey surface water monitoring stations.
+               Click on one to see how runoff changes seasonally and annually over
+               the course of the drought. Try zooming in and looking at differences
+               above and below major dams."}\hlstd{)}
+        \hlstd{)}
+      \hlstd{),}
+
+      \hlcom{#        column(6, }
+      \hlcom{#               offset = 1,}
+      \hlkwd{conditionalPanel}\hlstd{(}\hlstr{"!is.na(output.mapClick)"}\hlstd{,}
+                       \hlkwd{plotOutput}\hlstd{(}\hlstr{"sitePlot"}\hlstd{))}
+      \hlcom{#        )}
+      \hlcom{#      )}
+    \hlstd{),}
+
+    \hlkwd{tabPanel}\hlstd{(}
+      \hlstr{"Groundwater levels"}\hlstd{,}
+      \hlkwd{h1}\hlstd{(}\hlstr{"Groundwater"}\hlstd{),}
+
+      \hlkwd{fluidRow}\hlstd{(}
+        \hlkwd{column}\hlstd{(}\hlnum{5}\hlstd{,} \hlkwd{leafletOutput}\hlstd{(}\hlstr{"gwMap"}\hlstd{)),}
+        \hlkwd{column}\hlstd{(}\hlnum{6}\hlstd{,}
+               \hlkwd{helpText}\hlstd{(}\hlstr{"If surface water is California's first stop for water needs, 
+               groundwater is its backstop. Only a few municipalities still
+               rely on groundwater (Davis being one of them); however, it is of critical 
+               importance for irrigation. When surface supplies are down, 
+               reliance on groundwater increases, and unlike surface water and 
+               unlike every other state in the US, groundwater use is unregulated
+               in California. This has led to a furious groundwater grab during
+               the current drought."}\hlstd{),}
+               \hlkwd{br}\hlstd{(),}
+               \hlkwd{helpText}\hlstd{(}\hlstr{"The map to the left shows the groundwater wells that the the US 
+               Geological Survey uses to monitor groundwater elevation. Unfortunately,
+               even public monitoring of groundwater levels is legally challenging
+               in California, so data are sparser than hydrologists and water
+               managers would like. However, here you can click on a series of wells 
+               to see how groundwater levels have changed over the course of the 
+               current drought."}\hlstd{)}
+        \hlstd{)}
+      \hlstd{),}
+
+      \hlcom{#        column(6, }
+      \hlcom{#               offset = 1,}
+      \hlkwd{plotOutput}\hlstd{(}\hlstr{"GWPlot"}\hlstd{)}
+      \hlcom{#        )}
+
+      \hlcom{#      textOutput("wellsInfo"),}
+
+      \hlcom{#      )}
+    \hlstd{)}
+  \hlstd{)}
+\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 server.R
 
-<<>>=
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#path.app <- "C:/Users/Athena/Desktop/project/shinyApp/"}
+\hlcom{#path.toapp <- "C:/Users/Athena/Desktop/project"}
+
+\hlcom{#setwd(path.app)}
+
+\hlcom{# source files ####}
+\hlkwd{source}\hlstd{(}\hlkwc{file} \hlstd{=} \hlstr{"functions.R"}\hlstd{)}
+\hlkwd{source}\hlstd{(}\hlkwc{file} \hlstd{=} \hlstr{"plot.R"}\hlstd{)}  \hlcom{# Modified this so it brings df.long into the workspace}
+\hlkwd{source}\hlstd{(}\hlkwc{file} \hlstd{=} \hlstr{"readUSGSData.R"}\hlstd{)}
+\hlkwd{source}\hlstd{(}\hlkwc{file} \hlstd{=} \hlstr{"USGSplot.R"}\hlstd{)}
+
+\hlkwd{shinyServer}\hlstd{(}\hlkwa{function}\hlstd{(}\hlkwc{input}\hlstd{,} \hlkwc{output}\hlstd{) \{}
+
+  \hlstd{theCounty} \hlkwb{=} \hlkwd{reactive}\hlstd{(\{}
+    \hlkwa{if}\hlstd{(}\hlkwd{is.null}\hlstd{(input}\hlopt{$}\hlstd{plotclick))}
+      \hlkwd{return}\hlstd{(}\hlstr{"none"}\hlstd{)}
+    \hlkwd{latlong2county}\hlstd{(}
+      \hlkwd{data.frame}\hlstd{(}\hlkwc{x} \hlstd{= input}\hlopt{$}\hlstd{plotclick}\hlopt{$}\hlstd{x,} \hlkwc{y} \hlstd{= input}\hlopt{$}\hlstd{plotclick}\hlopt{$}\hlstd{y))}
+  \hlstd{\})}
+
+
+  \hlcom{# Test whether theCounty() is valid, for startup and bad clicks, to not}
+  \hlcom{# display charts on ui side. Idea from https://gist.github.com/ptoche/8312791}
+  \hlstd{output}\hlopt{$}\hlstd{badCounty} \hlkwb{<-} \hlkwd{renderText}\hlstd{(\{}
+    \hlkwa{if}\hlstd{(}
+      \hlkwd{theCounty}\hlstd{()} \hlopt{==} \hlstr{"none"} \hlopt{|}
+        \hlkwd{is.na}\hlstd{(}\hlkwd{theCounty}\hlstd{())}   \hlopt{|}
+        \hlopt{!}\hlkwd{any}\hlstd{(} \hlkwd{grepl}\hlstd{(}\hlkwd{theCounty}\hlstd{(), counties) )}
+    \hlstd{) \{}
+      \hlkwd{return}\hlstd{(}\hlnum{1}\hlstd{)}
+    \hlstd{\}} \hlkwa{else} \hlstd{\{}
+      \hlkwd{return}\hlstd{(}\hlnum{0}\hlstd{)}
+    \hlstd{\}}
+  \hlstd{\})}
+
+  \hlstd{output}\hlopt{$}\hlstd{theMap} \hlkwb{<-} \hlkwd{renderPlot}\hlstd{(\{}
+    \hlcom{# color.variable == 1L or 2L (can include more variables)}
+    \hlcom{# see functions.R for detail.}
+    \hlstd{select.box} \hlkwb{<-} \hlkwd{switch}\hlstd{(input}\hlopt{$}\hlstd{metric,}
+                         \hlstr{"Percent of California Consumption"} \hlstd{=} \hlnum{1L}\hlstd{,}
+                         \hlstr{"Per Capita Consumption"} \hlstd{=} \hlnum{2L}\hlstd{)}
+
+    \hlkwd{color.map}\hlstd{(}\hlkwc{color.variable} \hlstd{= select.box,} \hlkwc{year.map} \hlstd{=} \hlkwd{as.numeric}\hlstd{(input}\hlopt{$}\hlstd{year))}
+  \hlstd{\})}
+
+  \hlstd{output}\hlopt{$}\hlstd{countyText} \hlkwb{<-} \hlkwd{renderPrint}\hlstd{(\{}
+    \hlkwd{cat}\hlstd{(}\hlstr{"That's "}\hlstd{,} \hlkwd{simpleCap}\hlstd{(}\hlkwd{theCounty}\hlstd{()),} \hlstr{" county."}\hlstd{)}
+
+  \hlstd{\})}
+
+  \hlstd{output}\hlopt{$}\hlstd{useagePlot} \hlkwb{=}
+    \hlkwd{renderPlot}\hlstd{(}
+      \hlkwd{gg.wrapper}\hlstd{(}\hlkwc{county.name} \hlstd{=} \hlkwd{theCounty}\hlstd{(),} \hlkwc{year.gg} \hlstd{=} \hlkwd{as.numeric}\hlstd{(input}\hlopt{$}\hlstd{year))}
+    \hlstd{)}
+
+  \hlstd{output}\hlopt{$}\hlstd{siteMap} \hlkwb{<-} \hlkwd{renderLeaflet}\hlstd{(\{}
+    \hlkwd{leaflet}\hlstd{(}\hlkwc{data} \hlstd{= goodSurfaceData)} \hlopt{%>%}
+      \hlkwd{addProviderTiles}\hlstd{(}\hlstr{"Esri.WorldTopoMap"}\hlstd{)} \hlopt{%>%}
+      \hlkwd{addCircleMarkers}\hlstd{(}\hlopt{~}\hlstd{long,} \hlopt{~}\hlstd{lat,} \hlkwc{layerId} \hlstd{=} \hlopt{~} \hlstd{siteNumber,} \hlkwc{radius} \hlstd{=} \hlnum{2}\hlstd{)}
+  \hlstd{\})}
+
+  \hlkwd{observe}\hlstd{(\{}
+    \hlkwa{if}\hlstd{(}\hlopt{!}\hlkwd{is.null}\hlstd{(input}\hlopt{$}\hlstd{siteMap_marker_click}\hlopt{$}\hlstd{id))}
+      \hlstd{output}\hlopt{$}\hlstd{sitePlot} \hlkwb{=} \hlkwd{renderPlot}\hlstd{(\{}
+        \hlkwd{plot.discharge}\hlstd{(}\hlkwc{siteNumber} \hlstd{= input}\hlopt{$}\hlstd{siteMap_marker_click}\hlopt{$}\hlstd{id)}
+      \hlstd{\})}
+  \hlstd{\})}
+
+  \hlstd{output}\hlopt{$}\hlstd{gwMap} \hlkwb{<-} \hlkwd{renderLeaflet}\hlstd{(\{}
+    \hlkwd{leaflet}\hlstd{(}\hlkwc{data} \hlstd{= gwSites)} \hlopt{%>%}
+      \hlkwd{addProviderTiles}\hlstd{(}\hlstr{"Esri.WorldTopoMap"}\hlstd{)} \hlopt{%>%}
+      \hlkwd{addCircleMarkers}\hlstd{(}\hlopt{~}\hlstd{long,} \hlopt{~}\hlstd{lat,} \hlkwc{layerId} \hlstd{=} \hlopt{~} \hlstd{siteNumber,}
+                       \hlkwc{color} \hlstd{=} \hlstr{"red"}\hlstd{,} \hlkwc{radius} \hlstd{=} \hlnum{2}\hlstd{)}
+  \hlstd{\})}
+
+  \hlkwd{observe}\hlstd{(\{}
+    \hlkwa{if}\hlstd{(}\hlopt{!}\hlkwd{is.null}\hlstd{(input}\hlopt{$}\hlstd{gwMap_marker_click}\hlopt{$}\hlstd{id))}
+      \hlstd{output}\hlopt{$}\hlstd{GWPlot} \hlkwb{=} \hlkwd{renderPlot}\hlstd{(\{}
+        \hlkwd{gwPlot}\hlstd{(input}\hlopt{$}\hlstd{gwMap_marker_click}\hlopt{$}\hlstd{id)}
+      \hlstd{\})}
+  \hlstd{\})}
+
+  \hlkwa{if}\hlstd{(}\hlnum{FALSE}\hlstd{)\{}
+    \hlstd{theGWSites} \hlkwb{=} \hlkwd{reactiveValues}\hlstd{()}
+    \hlstd{theGWSites}\hlopt{$}\hlstd{sites} \hlkwb{=} \hlnum{374004122092106} \hlcom{# character(0)}
+
+    \hlcom{# On gw-map click, if well isn't in the vector to be plotted, add it.}
+    \hlkwd{observe}\hlstd{(\{}
+      \hlkwa{if}\hlstd{(}\hlopt{!}\hlkwd{is.null}\hlstd{(input}\hlopt{$}\hlstd{gwMap_marker_click}\hlopt{$}\hlstd{id)} \hlopt{&}
+           \hlopt{!}\hlstd{input}\hlopt{$}\hlstd{gwMap_marker_click}\hlopt{$}\hlstd{id} \hlopt{%in%} \hlstd{theGWSites}\hlopt{$}\hlstd{sites) \{}
+        \hlstd{nextWell} \hlkwb{<-} \hlkwd{isolate}\hlstd{(input}\hlopt{$}\hlstd{gwMap_marker_click}\hlopt{$}\hlstd{id)}
+        \hlkwa{if}\hlstd{(}\hlopt{!}\hlstd{nextWell} \hlopt{%in%} \hlstd{theGWSites}\hlopt{$}\hlstd{sites)}
+          \hlkwd{isolate}\hlstd{(theGWSites}\hlopt{$}\hlstd{sites} \hlkwb{<-} \hlkwd{c}\hlstd{(theGWSites}\hlopt{$}\hlstd{sites, nextWell))}
+      \hlstd{\}}
+    \hlstd{\})}
+
+    \hlkwd{observe}\hlstd{(\{}
+      \hlkwa{if}\hlstd{(input}\hlopt{$}\hlstd{clear} \hlopt{>} \hlnum{0}\hlstd{) \{}
+        \hlstd{theGWSites}\hlopt{$}\hlstd{sites} \hlkwb{=} \hlnum{374004122092106}  \hlcom{# ""}
+      \hlstd{\}}
+    \hlstd{\})}
+
+    \hlstd{output}\hlopt{$}\hlstd{wellsInfo} \hlkwb{=}
+      \hlkwd{renderPrint}\hlstd{(}\hlkwd{cat}\hlstd{(}\hlstr{"Plotting wells:"}\hlstd{, theGWSites}\hlopt{$}\hlstd{sites,} \hlkwc{sep} \hlstd{=} \hlstr{"\textbackslash{}n"}\hlstd{))}
+
+    \hlstd{output}\hlopt{$}\hlstd{GWPlot} \hlkwb{=} \hlkwd{renderPlot}\hlstd{(\{}
+      \hlkwd{gwPlot}\hlstd{(theGWSites}\hlopt{$}\hlstd{sites)}
+    \hlstd{\})}
+
+  \hlstd{\}}
+
+\hlstd{\})}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 functions.R
 
-<<>>=
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# install packages and load packages ####}
+\hlstd{packages.list} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"shiny"}\hlstd{,}
+                  \hlstr{"maps"}\hlstd{,}
+                  \hlstr{"mapdata"}\hlstd{,}
+                  \hlstr{"maptools"}\hlstd{,}
+                  \hlstr{"Hmisc"}\hlstd{,}
+                  \hlstr{"ggplot2"}\hlstd{,}
+                  \hlstr{"reshape2"}\hlstd{,}
+                  \hlstr{"dataRetrieval"}\hlstd{,}
+                  \hlstr{"data.table"}\hlstd{,}
+                  \hlstr{"RColorBrewer"}\hlstd{)}
+
+\hlkwa{for} \hlstd{(p} \hlkwa{in} \hlstd{packages.list) \{}
+  \hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(p} \hlopt{%in%} \hlkwd{rownames}\hlstd{(}\hlkwd{installed.packages}\hlstd{())))}
+    \hlkwd{install.packages}\hlstd{(}\hlkwc{pkgs} \hlstd{= p)}
+\hlstd{\}}
+
+\hlkwa{if} \hlstd{(}\hlopt{!}\hlstd{(}\hlstr{"leaflet"} \hlopt{%in%} \hlkwd{rownames}\hlstd{(}\hlkwd{installed.packages}\hlstd{()))) \{}
+  \hlkwd{require}\hlstd{(}\hlstr{"devtools"}\hlstd{)}
+  \hlstd{devtools}\hlopt{::}\hlkwd{install_github}\hlstd{(}\hlstr{"rstudio/leaflet"}\hlstd{)}
+\hlstd{\}}
+
+\hlkwd{library}\hlstd{(shiny)}
+\hlkwd{library}\hlstd{(maps)}
+\hlkwd{library}\hlstd{(leaflet)}
+\hlkwd{library}\hlstd{(mapdata)}
+\hlkwd{library}\hlstd{(maptools)}
+\hlkwd{library}\hlstd{(Hmisc)}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{library}\hlstd{(reshape2)}
+\hlkwd{library}\hlstd{(dataRetrieval)}
+\hlkwd{library}\hlstd{(data.table)}
+
+\hlstd{latlong2county} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{pointsDF}\hlstd{,} \hlkwc{wantState} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
+  \hlcom{# Taken verbetim from http://stackoverflow.com/questions/13316185}
+  \hlcom{# Prepare SpatialPolygons object with one SpatialPolygon}
+  \hlcom{# per county}
+  \hlstd{counties} \hlkwb{<-} \hlkwd{map}\hlstd{(}\hlstr{'county'}\hlstd{,} \hlkwc{fill}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{"transparent"}\hlstd{,} \hlkwc{plot}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+  \hlstd{IDs} \hlkwb{<-} \hlkwd{sapply}\hlstd{(}\hlkwd{strsplit}\hlstd{(counties}\hlopt{$}\hlstd{names,} \hlstr{":"}\hlstd{),} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) x[}\hlnum{1}\hlstd{])}
+  \hlstd{counties_sp} \hlkwb{<-} \hlkwd{map2SpatialPolygons}\hlstd{(counties,} \hlkwc{IDs}\hlstd{=IDs,}
+                                     \hlkwc{proj4string}\hlstd{=}\hlkwd{CRS}\hlstd{(}\hlstr{"+proj=longlat +datum=wgs84"}\hlstd{))}
+
+  \hlcom{# Convert pointsDF to a SpatialPoints object}
+  \hlstd{pointsSP} \hlkwb{<-} \hlkwd{SpatialPoints}\hlstd{(pointsDF,}
+                            \hlkwc{proj4string}\hlstd{=}\hlkwd{CRS}\hlstd{(}\hlstr{"+proj=longlat +datum=wgs84"}\hlstd{))}
+
+  \hlcom{# Use 'over' to get _indices_ of the Polygons object containing each point}
+  \hlstd{indices} \hlkwb{<-} \hlkwd{over}\hlstd{(pointsSP, counties_sp)}
+
+  \hlcom{# Return the county names of the Polygons object containing each point}
+  \hlstd{countyNames} \hlkwb{<-} \hlkwd{sapply}\hlstd{(counties_sp}\hlopt{@}\hlkwc{polygons}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) x}\hlopt{@}\hlkwc{ID}\hlstd{)}
+
+  \hlstd{county} \hlkwb{=} \hlkwd{strsplit}\hlstd{(countyNames[indices],} \hlstr{","}\hlstd{)[[}\hlnum{1}\hlstd{]]}
+
+  \hlkwa{if}\hlstd{(wantState) \{ county}
+  \hlstd{\}} \hlkwa{else} \hlstd{\{}
+    \hlstd{county[}\hlnum{2}\hlstd{]}
+  \hlstd{\}}
+\hlstd{\}}
+
+\hlstd{color.map} \hlkwb{=} \hlkwa{function}\hlstd{(}\hlkwc{color.variable} \hlstd{=} \hlnum{1L}\hlstd{,} \hlkwc{year.map}\hlstd{) \{}
+  \hlcom{# adapted from the example in the help doc of "map()" function.}
+
+  \hlcom{# manipulate the water dataset so that we can match it to the map data.}
+  \hlstd{df.water.cal} \hlkwb{=} \hlkwd{water.consum.data}\hlstd{(}\hlkwc{long} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{year}\hlstd{= year.map)}
+  \hlkwa{if}\hlstd{(year.map} \hlopt{==} \hlnum{2010}\hlstd{)\{}
+  \hlstd{df.water.cal}\hlopt{$}\hlstd{cal.County} \hlkwb{=} \hlkwd{sapply}\hlstd{(}\hlkwc{X} \hlstd{=} \hlkwd{strsplit}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{levels}\hlstd{(df.water.cal}\hlopt{$}\hlstd{County),} \hlkwc{split} \hlstd{=} \hlstr{' County'}\hlstd{),}
+                                   \hlkwc{FUN} \hlstd{=} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) x[[}\hlnum{1}\hlstd{]])}
+  \hlstd{\}} \hlkwa{else} \hlstd{\{}
+    \hlstd{df.water.cal}\hlopt{$}\hlstd{cal.County}\hlkwb{=}\hlstd{df.water.cal}\hlopt{$}\hlstd{County}
+  \hlstd{\}}
+  \hlstd{df.water.cal}\hlopt{$}\hlstd{polyname} \hlkwb{=} \hlkwd{paste0}\hlstd{(}\hlstr{"california,"}\hlstd{,} \hlkwd{tolower}\hlstd{(df.water.cal}\hlopt{$}\hlstd{cal.County))}
+
+  \hlcom{# define color buckets}
+  \hlstd{colors} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"#fee5d9"}\hlstd{,}
+             \hlstr{"#fcbba1"}\hlstd{,}
+             \hlstr{"#fc9272"}\hlstd{,}
+             \hlstr{"#fb6a4a"}\hlstd{,}
+             \hlstr{"#de2d26"}\hlstd{,}
+             \hlstr{"#a50f15"}\hlstd{)}
+
+  \hlkwa{if} \hlstd{(color.variable} \hlopt{==} \hlnum{1L}\hlstd{) \{}
+    \hlstd{df.water.cal}\hlopt{$}\hlstd{colorBuckets} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{cut}\hlstd{(df.water.cal}\hlopt{$}\hlstd{Percent,} \hlkwc{breaks} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{0.01}\hlstd{,} \hlnum{1}\hlopt{:}\hlnum{5}\hlopt{*}\hlnum{0.02}\hlstd{)))}
+    \hlstd{leg.txt} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"<1%"}\hlstd{,} \hlstr{"1-2%"}\hlstd{,} \hlstr{"2-4%"}\hlstd{,} \hlstr{"4-6%"}\hlstd{,} \hlstr{"6-8%"}\hlstd{,} \hlstr{"8-10%"}\hlstd{)}
+    \hlstd{title.txt} \hlkwb{<-} \hlstr{"County consumption:\textbackslash{}n% of California total"}
+  \hlstd{\}} \hlkwa{else if} \hlstd{(color.variable} \hlopt{==} \hlnum{2L}\hlstd{) \{}
+    \hlstd{df.water.cal}\hlopt{$}\hlstd{colorBuckets} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(}\hlkwd{cut}\hlstd{(df.water.cal}\hlopt{$}\hlstd{Per.Cap,} \hlkwc{breaks} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{5}\hlstd{,} \hlnum{10}\hlstd{,} \hlnum{20}\hlstd{,} \hlnum{40}\hlstd{)))}
+    \hlstd{leg.txt} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"<1"}\hlstd{,} \hlstr{"1-5"}\hlstd{,} \hlstr{"5-10"}\hlstd{,} \hlstr{"10-20"}\hlstd{,} \hlstr{">20"}\hlstd{)}
+    \hlstd{title.txt} \hlkwb{<-} \hlstr{"Per Capita Consumption \textbackslash{}n (Mgal/day/1000 people)"}
+  \hlstd{\}}
+
+
+  \hlcom{# align data with map definitions by (partial) matching state,county}
+  \hlcom{# names, which include multiple polygons for some counties}
+  \hlstd{colorsmatched} \hlkwb{<-} \hlstd{df.water.cal}\hlopt{$}\hlstd{colorBuckets[}
+        \hlkwd{match}\hlstd{(}\hlkwd{map}\hlstd{(}\hlkwc{database} \hlstd{=} \hlstr{"county"}\hlstd{,} \hlkwc{regions} \hlstd{=} \hlstr{"california"}\hlstd{,} \hlkwc{plot}\hlstd{=}\hlnum{FALSE}\hlstd{)}\hlopt{$}\hlstd{names,df.water.cal}\hlopt{$}\hlstd{polyname)]}
+
+  \hlcom{# draw map}
+  \hlkwd{map}\hlstd{(}\hlkwc{database} \hlstd{=} \hlstr{"county"}\hlstd{,} \hlkwc{regions} \hlstd{=} \hlstr{"california"}\hlstd{,} \hlkwc{col} \hlstd{= colors[colorsmatched],} \hlkwc{fill} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+        \hlkwc{resolution} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{lty} \hlstd{=} \hlnum{1}\hlstd{)}
+  \hlcom{# the following lines might be useful if we draw the map for the whole U.S.}
+  \hlcom{#   map("state", col = "white", fill = FALSE, add = TRUE, lty = 1, lwd = 0.2,}
+  \hlcom{#       projection="polyconic")}
+
+  \hlcom{#INCLUDING CITIES}
+  \hlcom{#data(us.cities)}
+  \hlcom{#cities <- c("^San Francisco", "^West Sacramento", "^Los Angeles", "^San Diego", "^Fresno")}
+  \hlcom{#city.index <- sapply(cities , function(x)\{grep(x, us.cities[ ,1])\})}
+  \hlcom{#map.cities(us.cities[city.index, ], country = "CA", }
+        \hlcom{#label = TRUE, pch = 16, col = "black", cex = 1.5, font = 2)}
+  \hlkwd{title}\hlstd{(title.txt)}
+  \hlkwd{legend}\hlstd{(}\hlstr{"topright"}\hlstd{, leg.txt,} \hlkwc{fill} \hlstd{= colors)}
+\hlstd{\}}
+
+\hlstd{simpleCap} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
+  \hlcom{# From toupper() help file.}
+  \hlstd{s} \hlkwb{<-} \hlkwd{strsplit}\hlstd{(x,} \hlstr{" "}\hlstd{)[[}\hlnum{1}\hlstd{]]}
+  \hlkwd{paste}\hlstd{(}\hlkwd{toupper}\hlstd{(}\hlkwd{substring}\hlstd{(s,} \hlnum{1}\hlstd{,}\hlnum{1}\hlstd{)),} \hlkwd{substring}\hlstd{(s,} \hlnum{2}\hlstd{),}
+        \hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{,} \hlkwc{collapse}\hlstd{=}\hlstr{" "}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 plot.R
 
-<<>>=
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#This Script will make the ggplot wrapper}
+\hlcom{# rm(list=ls())  # ML: It seems very dangerous to me to source files with this command.}
+
+\hlcom{# We want to build this data.frame once, not on each call to gg.wrapper.}
+\hlstd{water.consum.data} \hlkwb{<-} \hlkwa{function} \hlstd{(}\hlkwc{select.variables} \hlstd{=} \hlkwa{NULL}\hlstd{,}
+                               \hlkwc{long}\hlstd{,}
+
+                               \hlkwc{year}\hlstd{=}\hlnum{2010}\hlstd{) \{}
+  \hlstd{df} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlkwc{file} \hlstd{=} \hlkwd{paste0}\hlstd{(}\hlstr{"./clean_data/ca_"}\hlstd{,year,}\hlstr{".csv"}\hlstd{))}
+
+
+  \hlkwa{if} \hlstd{(}\hlopt{!}\hlkwd{is.null}\hlstd{(select.variables))}
+    \hlstd{df} \hlkwb{<-} \hlstd{df[ , select.variables]}
+
+  \hlcom{#To use ggplot, I need to reshape the data from wide to long.}
+  \hlkwa{if} \hlstd{(long) \{}
+    \hlstd{df.long} \hlkwb{<-} \hlkwd{melt}\hlstd{(df,} \hlkwc{id} \hlstd{=} \hlstr{"County"}\hlstd{)}
+    \hlkwd{names}\hlstd{(df.long)[}\hlnum{2}\hlopt{:}\hlnum{3}\hlstd{]} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"Source"}\hlstd{,}\hlstr{"Water"}\hlstd{)}
+    \hlkwd{return}\hlstd{(df.long)}
+  \hlstd{\}} \hlkwa{else} \hlstd{\{}
+    \hlkwd{return} \hlstd{(df)}
+  \hlstd{\}}
+\hlstd{\}}
+
+\hlstd{cc} \hlkwb{=} \hlkwd{rep}\hlstd{(}\hlstr{"NULL"}\hlstd{,} \hlnum{20}\hlstd{)}
+\hlstd{cc[}\hlnum{3}\hlstd{]} \hlkwb{=} \hlstr{"character"}
+\hlstd{counties} \hlkwb{=} \hlkwd{tolower}\hlstd{(}\hlkwd{read.csv}\hlstd{(}\hlstr{"./clean_data//ca_2010.csv"}\hlstd{,} \hlkwc{colClasses} \hlstd{= cc)}\hlopt{$}\hlstd{County)}
+
+\hlcom{# debugonce(gg.wrapper)}
+\hlcom{# gg.wrapper("imperial", "2000")}
+\hlcom{#plot}
+\hlstd{gg.wrapper} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{county.name}\hlstd{,} \hlkwc{year.gg}\hlstd{)\{}
+
+  \hlstd{theDF} \hlkwb{<-} \hlkwd{water.consum.data}\hlstd{(}
+    \hlkwc{select.variables} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"County"}\hlstd{,} \hlstr{"Public.Supply"}\hlstd{,} \hlstr{"Domestic.Self"}\hlstd{,} \hlstr{"Industry"}\hlstd{,}
+                         \hlstr{"Irrigation"}\hlstd{,} \hlstr{"Livestock"}\hlstd{,}
+                         \hlstr{"Aquaculture"}\hlstd{,} \hlstr{"Mining"}\hlstd{,}\hlstr{"Thermoelectric"}\hlstd{),}
+    \hlkwc{long} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+    \hlkwc{year} \hlstd{= year.gg)}
+
+  \hlstd{plotDF} \hlkwb{=} \hlstd{theDF[}\hlkwd{grep}\hlstd{(}\hlkwc{pattern} \hlstd{= county.name,} \hlkwc{x} \hlstd{=} \hlkwd{tolower}\hlstd{(theDF}\hlopt{$}\hlstd{County)),]}
+  \hlstd{plotDF}\hlopt{$}\hlstd{Water} \hlkwb{=} \hlstd{plotDF}\hlopt{$}\hlstd{Water} \hlopt{*} \hlnum{.325851} \hlopt{*} \hlnum{365.25} \hlcom{# MGal/day -> AF/year}
+\hlcom{#  plotDF = plotDF[plotDF$Water > 0, ]}
+  \hlstd{plotDF}\hlopt{$}\hlstd{lab} \hlkwb{=} \hlkwd{sprintf}\hlstd{(}\hlstr{"%1.0f"}\hlstd{, plotDF}\hlopt{$}\hlstd{Water)}
+  \hlstd{plotDF}\hlopt{$}\hlstd{Source} \hlkwb{=} \hlkwd{factor}\hlstd{(plotDF}\hlopt{$}\hlstd{Source,}
+                         \hlkwc{levels} \hlstd{= plotDF}\hlopt{$}\hlstd{Source[}\hlkwd{order}\hlstd{(plotDF}\hlopt{$}\hlstd{Water)],}
+                         \hlkwc{ordered} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+  \hlcom{#First I will subsample the data.  Some data is a double count.  }
+  \hlcom{#For example Ir=Ir.C+Ir.G (i.e. Irrigation = Irrigation Crops + Irrigation Golf)}
+  \hlstd{col} \hlkwb{=} \hlkwd{brewer.pal}\hlstd{(}\hlnum{8}\hlstd{,} \hlstr{"Set1"}\hlstd{)}
+  \hlkwd{names}\hlstd{(col)} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"Public.Supply"}\hlstd{,} \hlstr{"Domestic.Self"}\hlstd{,} \hlstr{"Industry"}\hlstd{,}
+                 \hlstr{"Irrigation"}\hlstd{,} \hlstr{"Livestock"}\hlstd{,}
+                 \hlstr{"Aquaculture"}\hlstd{,} \hlstr{"Mining"}\hlstd{,}\hlstr{"Thermoelectric"}\hlstd{)}
+
+  \hlstd{plot.water} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(}\hlkwc{data} \hlstd{= plotDF,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=Source,}\hlkwc{y}\hlstd{=Water,} \hlkwc{fill} \hlstd{=Source ))}\hlopt{+}
+    \hlkwd{geom_bar}\hlstd{(}\hlkwc{stat}\hlstd{=}\hlstr{"identity"}\hlstd{)}\hlopt{+}
+    \hlkwd{theme_bw}\hlstd{()}\hlopt{+}
+\hlcom{#    scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+}
+    \hlkwd{scale_x_discrete}\hlstd{(}\hlstr{""}\hlstd{)} \hlopt{+}
+    \hlkwd{scale_y_log10}\hlstd{(}\hlstr{"Fresh Water Use (acre-feet/year)"}\hlstd{)} \hlopt{+}
+\hlcom{#                  limits = c(1, max(theDF$Water) + .05 * max(theDF$Water))) +}
+  \hlkwd{scale_fill_manual}\hlstd{(}\hlkwc{values} \hlstd{= col)} \hlopt{+}
+  \hlkwd{geom_text}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{label} \hlstd{= lab,} \hlkwc{y} \hlstd{=} \hlkwd{ifelse}\hlstd{(Water} \hlopt{<} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{, Water} \hlopt{/} \hlnum{2}\hlstd{)))} \hlopt{+}
+    \hlkwd{coord_flip}\hlstd{()}\hlopt{+}
+    \hlkwd{guides}\hlstd{(}\hlkwc{fill}\hlstd{=}\hlnum{FALSE}\hlstd{)}\hlopt{+}
+    \hlkwd{ggtitle}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{simpleCap}\hlstd{(county.name),} \hlstr{"County"}\hlstd{))}\hlopt{+}
+    \hlkwd{theme}\hlstd{(}\hlkwc{plot.title} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{size}\hlstd{=}\hlnum{18}\hlstd{,} \hlkwc{face}\hlstd{=}\hlstr{"bold"}\hlstd{),}
+                \hlcom{#Don't adjust text size. If you increase it will cut off San Luis Obispo County}
+          \hlkwc{axis.text.y} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{size} \hlstd{=} \hlnum{15}\hlstd{),}
+          \hlkwc{axis.text.x} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{size} \hlstd{=} \hlnum{12}\hlstd{),}
+          \hlkwc{axis.title.x} \hlstd{=} \hlkwd{element_text}\hlstd{(}\hlkwc{size} \hlstd{=} \hlnum{15}\hlstd{))}
+  \hlkwd{return}\hlstd{(plot.water)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 USGSplot.R
 
-<<>>=
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  plot = \hlkwd{try}(\hlkwd{plot.discharge}(siteNumber = siteNumber))
+
+  \hlkwd{require}(ggplot2)
+  null.plot = \hlkwd{qplot}(x = 0, y = 0)
+
+  \hlkwd{if} ((\hlkwd{class}(plot)[[1]] != \hlstr{"try-error"})) \{
+    \hlkwd{return}(\hlkwd{list}(0, plot))
+  \} else \{
+    \hlkwd{return}(\hlkwd{list}(1, null.plot))
+  \}
+\}
+
+plot.discharge.2 = \hlkwd{function}(siteNumber,
+                            startDate = NULL,
+                            endDate = NULL) \{
+  \hlkwd{require}(dataRetrieval)
+
+  surfaceData = \hlkwd{try}(\hlkwd{readNWISmeas}(siteNumbers = siteNumber))
+
+  \hlkwd{stopifnot}(\hlstr{"measurement_dt"} %in% \hlkwd{names}(surfaceData))
+  \hlkwd{stopifnot}(\hlstr{"discharge_va"} %in% \hlkwd{names}(surfaceData))
+  \hlkwd{stopifnot}(\hlstr{"gage_height_va"} %in% \hlkwd{names}(surfaceData))
+
+  siteInfo = \hlkwd{attr}(surfaceData, \hlstr{"siteInfo"})
+
+  \hlkwd{if} (!\hlkwd{is.null}(startDate))
+    surfaceData = surfaceData[surfaceData$measurement_dt >= \hlkwd{as.POSIXct}(startDate), ]
+
+  \hlkwd{if} (!\hlkwd{is.null}(endDate))
+    surfaceData = surfaceData[surfaceData$measurement_dt <= \hlkwd{as.POSIXct}(endDate), ]
+
+  \hlkwd{require}(ggplot2)
+  plot = \hlkwd{ggplot}(data = surfaceData, \hlkwd{aes}(x = measurement_dt, y = discharge_va)) +
+    \hlkwd{geom_point}() +
+    \hlkwd{geom_line}() +
+    \hlkwd{xlab}(\hlstr{"Date"}) +
+    \hlkwd{ylab}(\hlstr{"Discharge, cubic feet per second"}) +
+    \hlkwd{ggtitle}(siteInfo$station_nm)
+
+  \hlkwd{return}(plot)
+\}
+
+
+plot.discharge = \hlkwd{function}(siteNumber,
+                          parameterCd = \hlstr{"00060"}) \{
+  \hlkwd{require}(dataRetrieval)
+
+  data = \hlkwd{readNWISdv}(siteNumber, startDate = \hlstr{"2011-10-01"},
+                    parameterCd)
+
+  data = \hlkwd{renameNWISColumns}(data)
+
+  \hlkwd{if}(!\hlstr{"Flow"} %in% \hlkwd{names}(data))
+    \hlkwd{stop}(\hlstr{"Sorry, USGS doesn't have flow data for that station."})
+     
+
+  variableInfo = \hlkwd{attr}(data, \hlstr{"variableInfo"})
+  siteInfo = \hlkwd{attr}(data, \hlstr{"siteInfo"})
+
+  \hlkwd{require}(ggplot2)
+ \hlkwd{ggplot}(data = data, \hlkwd{aes}(x = Date, y = Flow)) +
+    \hlkwd{geom_line}() +
+    \hlkwd{xlab}(\hlstr{"Date"}) +
+    \hlkwd{ylab}(variableInfo$parameter_desc) +
+    \hlkwd{theme_bw}() +
+    \hlkwd{scale_y_log10}() +
+    \hlkwd{ggtitle}(\hlkwd{paste0}(\hlstr{"Daily warter discharge at: "}, siteInfo$station_nm))
+
+\hlcom{#  return(plot)}
+\}
+
+gwPlot = \hlkwd{function}(siteNum)
+\{
+  \hlkwd{ggplot}(gwLevels[gwLevels$siteNumber == siteNum, ], 
+         \hlkwd{aes}(x = date, 
+\hlcom{#             y = log10(level))) +}
+             y = level)) +
+\hlcom{             # color = siteNumber)) +}
+    \hlkwd{scale_y_reverse}() + 
+    \hlkwd{scale_x_date}(limits = \hlkwd{c}(\hlkwd{as.Date}(\hlstr{"2011-10-01"}), \hlkwd{Sys.Date}())) +
+    \hlkwd{geom_line}() +
+    \hlkwd{geom_point}() +
+\hlcom{#    ylab("Depth, log10(feet)") +}
+    \hlkwd{ylab}(\hlstr{"\hlkwd{Depth} (feet)"}) +
+    \hlkwd{xlab}(\hlstr{"Date"}) +
+    \hlkwd{theme_bw}()
+\}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 readUSGSData.R
 
-<<>>=
-@
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{sites} \hlkwb{=} \hlkwd{readRDS}\hlstd{(}\hlstr{"clean_data/allSites.RDS"}\hlstd{)}
+\hlstd{goodSurfaceData} \hlkwb{=} \hlkwd{readRDS}\hlstd{(}\hlstr{"clean_data/goodSurfaceSites.RDS"}\hlstd{)}
+\hlstd{gwLevels} \hlkwb{=} \hlkwd{readRDS}\hlstd{(}\hlstr{"clean_data/gwLevels.RDS"}\hlstd{)}
+\hlstd{gwSites} \hlkwb{=} \hlstd{sites[sites}\hlopt{$}\hlstd{siteNumber} \hlopt{%in%} \hlstd{gwLevels}\hlopt{$}\hlstd{siteNumber, ]}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 \end{document}

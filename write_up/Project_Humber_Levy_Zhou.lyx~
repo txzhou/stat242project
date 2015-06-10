@@ -4,6 +4,9 @@
 \begin_header
 \textclass article
 \use_default_options true
+\begin_modules
+knitr
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -79,13 +82,14 @@ Project: Visualization of California Water
 
 \begin_layout Standard
 \align center
-Git Repository: https://z109620@bitbucket.org/z109620/project.git
+Bit Bucket Repository: https://z109620@bitbucket.org/z109620/project.git
 \end_layout
 
 \begin_layout Standard
 \noindent
 \align center
-Visualization: 
+R code to access our Visualization: require(shiny); runGitHub( repo = "stat242pr
+oject", username = "txzhou", subdir = "shinyApp")
 \end_layout
 
 \begin_layout Standard
@@ -99,8 +103,32 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-California has been experiencing a drought since the onset of 2012.
- Over this time LIST BAD SHIT THAT HAPPENED.
+Since the onset of 2012, California has been experiencing one of its worst
+ droughts in over a thousand years
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.nytimes.com/2015/05/03/opinion/sunday/the-end-of-california.html?_r=0
+\end_layout
+
+\end_inset
+
+.
+ For the year of 2014 alone the agricultural losses as a results of the
+ drought totaled 2.2 billion dollars as well as a loss of 17,000 agricultural
+ jobs 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.wsj.com/articles/drought-will-cost-california-2-2-billion-in-losses-cos
+ts-this-year-1405452120
+\end_layout
+
+\end_inset
+
+.
  In an effort to convey the magnitude of this persistent drought the United
  States Geological Survey (USGS) generated an interesting visualization
 \begin_inset Foot
@@ -124,7 +152,11 @@ The USGS visualization: http://cida.usgs.gov/ca_drought/
 status open
 
 \begin_layout Plain Layout
-Our visualization: INSERT THE ADDRESS TO OUR VISUALIZATION
+Our visualization: To access the visualization the following lines of code
+ must be executed: require(shiny); runGitHub( repo = "stat242project", username
+ = "txzhou", subdir = "shinyApp").
+ Alternatively, the shiny app can be run by cloning the repository locally
+ on your own machine.
 \end_layout
 
 \end_inset
@@ -152,7 +184,7 @@ Three distinct visualization are generated within the project.
  Finally, the last visualization depicts the ground water depth of wells.
  In what follows, we will discuss each of these visualization separately
  within sections 2, 3 and 4.
- 
+ All R scripts are contained in the Appendix below.
 \end_layout
 
 \begin_layout Section
@@ -197,7 +229,7 @@ Since the data set for water consumption is small, we store all the data
 
 \begin_layout Standard
 The code to generate this visualization is contained the in R scripts plot.R
- and functions.R.
+ and functions.R in the Appendix.
  The color.map function within functions.R generates the plot of California.
  This is essentially a wrapper of the map function from R's maps package.
  Upon clicking on a county, a graph of the consumption by sector for that
@@ -282,10 +314,6 @@ Ground water wells are not currently depicted within the USGS visualization.
 The approach used to generate the ground water visualization is very similar
  to the stream flow visualization.
  As above both, the leafet and dataRetrieval packages are utilized.
- However, one additional feature of this visualization is that for each
- successive on a well sites the well depth accumulate on the plot.
- This is helpful for comparisons across wells.
- The action bottom below the plot, clears all but the last plot.
  
 \end_layout
 
@@ -299,9 +327,10 @@ This project compliments the USGS visualization.
  elevation.
  In this project we opt to use the R shiny package.
  Clearly, this assignment could have been done using JavaScript, however,
- the shiny is capable to generate some very nice looking graphics.
- A fun summer project would be do redo some of this assignment in JavaScript
- to understand the difference between these two approaches.
+ shiny is capable to generate some very nice looking graphics and only requires
+ a knowledge of R.
+ That withstanding, a fun summer project would be do redo some of this project
+ in JavaScript to understand the differences between these two approaches.
  
 \end_layout
 
@@ -332,11 +361,661 @@ ui.R
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-<<>>=
+<<echo=TRUE, eval = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(shiny)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(maps)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(leaflet)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(mapdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(maptools)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(Hmisc)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(ggplot2)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(reshape2)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(dataRetrieval)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(data.table)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(RColorBrewer)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Define UI for application
+\end_layout
+
+\begin_layout Plain Layout
+
+shinyUI(
+\end_layout
+
+\begin_layout Plain Layout
+
+  navbarPage(
+\end_layout
+
+\begin_layout Plain Layout
+
+    "California Water Use",
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    tabPanel(
+\end_layout
+
+\begin_layout Plain Layout
+
+      "Use by county",
+\end_layout
+
+\begin_layout Plain Layout
+
+      h1("Water use"),
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      fluidRow(
+\end_layout
+
+\begin_layout Plain Layout
+
+        column(5,
+\end_layout
+
+\begin_layout Plain Layout
+
+               #Selection box
+\end_layout
+
+\begin_layout Plain Layout
+
+               selectInput("metric",
+\end_layout
+
+\begin_layout Plain Layout
+
+                           label = "Choose a Water Consumption Metric",
+\end_layout
+
+\begin_layout Plain Layout
+
+                           choices = list("Percent of California Consumption",
+\end_layout
+
+\begin_layout Plain Layout
+
+                                          "Per Capita Consumption")),
+\end_layout
+
+\begin_layout Plain Layout
+
+               
+\end_layout
+
+\begin_layout Plain Layout
+
+               selectInput("year",
+\end_layout
+
+\begin_layout Plain Layout
+
+                           label = "Choose a Year",
+\end_layout
+
+\begin_layout Plain Layout
+
+                           choices = list(2000,2005,2010)),
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+               helpText("Click on a county for consumption by sector for
+ that county in the selected year."),
+\end_layout
+
+\begin_layout Plain Layout
+
+               
+\end_layout
+
+\begin_layout Plain Layout
+
+               # Print the clickable map
+\end_layout
+
+\begin_layout Plain Layout
+
+               plotOutput("theMap", height = "400px", click = "plotclick"),
+\end_layout
+
+\begin_layout Plain Layout
+
+               
+\end_layout
+
+\begin_layout Plain Layout
+
+               textOutput("badCounty")  # This line has to be present for
+ the
+\end_layout
+
+\begin_layout Plain Layout
+
+               # conditionalPanel()s to work.
+ I have no idea why.
+ Maybe badCounty has
+\end_layout
+
+\begin_layout Plain Layout
+
+               # to be evaluated before the JS test is called???
+\end_layout
+
+\begin_layout Plain Layout
+
+               
+\end_layout
+
+\begin_layout Plain Layout
+
+               
+\end_layout
+
+\begin_layout Plain Layout
+
+        ),
+\end_layout
+
+\begin_layout Plain Layout
+
+        
+\end_layout
+
+\begin_layout Plain Layout
+
+        column(6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               helpText("California is a geographically diverse state with
+ widely varying 
+\end_layout
+
+\begin_layout Plain Layout
+
+                economies and population densities across its counties.
+ Here you 
+\end_layout
+
+\begin_layout Plain Layout
+
+                can explore how much water each county uses and what they
+ use it for."),
+\end_layout
+
+\begin_layout Plain Layout
+
+               
+\end_layout
+
+\begin_layout Plain Layout
+
+               # offset = 1,
+\end_layout
+
+\begin_layout Plain Layout
+
+               # Show a plot of the generated distribution
+\end_layout
+
+\begin_layout Plain Layout
+
+               conditionalPanel("output.badCounty == 0",
+\end_layout
+
+\begin_layout Plain Layout
+
+                                plotOutput("useagePlot"))
+\end_layout
+
+\begin_layout Plain Layout
+
+        )
+\end_layout
+
+\begin_layout Plain Layout
+
+      )
+\end_layout
+
+\begin_layout Plain Layout
+
+    ),
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    tabPanel(
+\end_layout
+
+\begin_layout Plain Layout
+
+      "Surface water flow",
+\end_layout
+
+\begin_layout Plain Layout
+
+      h1("Surface water"),
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      fluidRow(
+\end_layout
+
+\begin_layout Plain Layout
+
+        column(5, leafletOutput("siteMap")),
+\end_layout
+
+\begin_layout Plain Layout
+
+        column(6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               helpText("Surface water provides some of California's water
+ supply.
+ It is 
+\end_layout
+
+\begin_layout Plain Layout
+
+               stored in massive manmade reservoirs on almost all the major
+ rivers and
+\end_layout
+
+\begin_layout Plain Layout
+
+               in the natural reservoir of high alpine snowpack in the Sierra
+\end_layout
+
+\begin_layout Plain Layout
+
+               Nevada mountains.
+ In the current drought, snowpack has been far 
+\end_layout
+
+\begin_layout Plain Layout
+
+               less than normal, which means less runoff to fill the reservoirs,
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+               the levels of which have dropped dramatically."),
+\end_layout
+
+\begin_layout Plain Layout
+
+               br(),
+\end_layout
+
+\begin_layout Plain Layout
+
+               helpText("The map to left shows US Geological Survey surface
+ water monitoring stations.
+\end_layout
+
+\begin_layout Plain Layout
+
+               Click on one to see how runoff changes seasonally and annually
+ over
+\end_layout
+
+\begin_layout Plain Layout
+
+               the course of the drought.
+ Try zooming in and looking at differences
+\end_layout
+
+\begin_layout Plain Layout
+
+               above and below major dams.")
+\end_layout
+
+\begin_layout Plain Layout
+
+        )
+\end_layout
+
+\begin_layout Plain Layout
+
+      ),
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      #        column(6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+      #               offset = 1,
+\end_layout
+
+\begin_layout Plain Layout
+
+      conditionalPanel("!is.na(output.mapClick)",
+\end_layout
+
+\begin_layout Plain Layout
+
+                       plotOutput("sitePlot"))
+\end_layout
+
+\begin_layout Plain Layout
+
+      #        )
+\end_layout
+
+\begin_layout Plain Layout
+
+      #      )
+\end_layout
+
+\begin_layout Plain Layout
+
+    ),
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    tabPanel(
+\end_layout
+
+\begin_layout Plain Layout
+
+      "Groundwater levels",
+\end_layout
+
+\begin_layout Plain Layout
+
+      h1("Groundwater"),
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      fluidRow(
+\end_layout
+
+\begin_layout Plain Layout
+
+        column(5, leafletOutput("gwMap")),
+\end_layout
+
+\begin_layout Plain Layout
+
+        column(6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               helpText("If surface water is California's first stop for
+ water needs, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               groundwater is its backstop.
+ Only a few municipalities still
+\end_layout
+
+\begin_layout Plain Layout
+
+               rely on groundwater (Davis being one of them); however, it
+ is of critical 
+\end_layout
+
+\begin_layout Plain Layout
+
+               importance for irrigation.
+ When surface supplies are down, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               reliance on groundwater increases, and unlike surface water
+ and 
+\end_layout
+
+\begin_layout Plain Layout
+
+               unlike every other state in the US, groundwater use is unregulate
+d
+\end_layout
+
+\begin_layout Plain Layout
+
+               in California.
+ This has led to a furious groundwater grab during
+\end_layout
+
+\begin_layout Plain Layout
+
+               the current drought."),
+\end_layout
+
+\begin_layout Plain Layout
+
+               br(),
+\end_layout
+
+\begin_layout Plain Layout
+
+               helpText("The map to the left shows the groundwater wells
+ that the the US 
+\end_layout
+
+\begin_layout Plain Layout
+
+               Geological Survey uses to monitor groundwater elevation.
+ Unfortunately,
+\end_layout
+
+\begin_layout Plain Layout
+
+               even public monitoring of groundwater levels is legally challengi
+ng
+\end_layout
+
+\begin_layout Plain Layout
+
+               in California, so data are sparser than hydrologists and
+ water
+\end_layout
+
+\begin_layout Plain Layout
+
+               managers would like.
+ However, here you can click on a series of wells 
+\end_layout
+
+\begin_layout Plain Layout
+
+               to see how groundwater levels have changed over the course
+ of the 
+\end_layout
+
+\begin_layout Plain Layout
+
+               current drought.")
+\end_layout
+
+\begin_layout Plain Layout
+
+        )
+\end_layout
+
+\begin_layout Plain Layout
+
+      ),
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      #        column(6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+      #               offset = 1,
+\end_layout
+
+\begin_layout Plain Layout
+
+      plotOutput("GWPlot")
+\end_layout
+
+\begin_layout Plain Layout
+
+      #        )
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      #      textOutput("wellsInfo"),
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\end_layout
+
+\begin_layout Plain Layout
+
+      #      )
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+  )
+\end_layout
+
+\begin_layout Plain Layout
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -355,11 +1034,575 @@ server.R
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-<<>>=
+<<echo = TRUE, eval = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#path.app <- "C:/Users/Athena/Desktop/project/shinyApp/"
+\end_layout
+
+\begin_layout Plain Layout
+
+#path.toapp <- "C:/Users/Athena/Desktop/project"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#setwd(path.app)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# source files ####
+\end_layout
+
+\begin_layout Plain Layout
+
+source(file = "functions.R")
+\end_layout
+
+\begin_layout Plain Layout
+
+source(file = "plot.R")  # Modified this so it brings df.long into the workspace
+\end_layout
+
+\begin_layout Plain Layout
+
+source(file = "readUSGSData.R")
+\end_layout
+
+\begin_layout Plain Layout
+
+source(file = "USGSplot.R")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+shinyServer(function(input, output) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  theCounty = reactive({
+\end_layout
+
+\begin_layout Plain Layout
+
+    if(is.null(input$plotclick))
+\end_layout
+
+\begin_layout Plain Layout
+
+      return("none")
+\end_layout
+
+\begin_layout Plain Layout
+
+    latlong2county(
+\end_layout
+
+\begin_layout Plain Layout
+
+      data.frame(x = input$plotclick$x, y = input$plotclick$y))
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Test whether theCounty() is valid, for startup and bad clicks, to not
+\end_layout
+
+\begin_layout Plain Layout
+
+  # display charts on ui side.
+ Idea from https://gist.github.com/ptoche/8312791
+\end_layout
+
+\begin_layout Plain Layout
+
+  output$badCounty <- renderText({
+\end_layout
+
+\begin_layout Plain Layout
+
+    if(
+\end_layout
+
+\begin_layout Plain Layout
+
+      theCounty() == "none" |
+\end_layout
+
+\begin_layout Plain Layout
+
+        is.na(theCounty())   |
+\end_layout
+
+\begin_layout Plain Layout
+
+        !any( grepl(theCounty(), counties) )
+\end_layout
+
+\begin_layout Plain Layout
+
+    ) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      return(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      return(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  output$theMap <- renderPlot({
+\end_layout
+
+\begin_layout Plain Layout
+
+    # color.variable == 1L or 2L (can include more variables)
+\end_layout
+
+\begin_layout Plain Layout
+
+    # see functions.R for detail.
+\end_layout
+
+\begin_layout Plain Layout
+
+    select.box <- switch(input$metric,
+\end_layout
+
+\begin_layout Plain Layout
+
+                         "Percent of California Consumption" = 1L,
+\end_layout
+
+\begin_layout Plain Layout
+
+                         "Per Capita Consumption" = 2L)
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    color.map(color.variable = select.box, year.map = as.numeric(input$year))
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  output$countyText <- renderPrint({
+\end_layout
+
+\begin_layout Plain Layout
+
+    cat("That's ", simpleCap(theCounty()), " county.")
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  output$useagePlot =
+\end_layout
+
+\begin_layout Plain Layout
+
+    renderPlot(
+\end_layout
+
+\begin_layout Plain Layout
+
+      gg.wrapper(county.name = theCounty(), year.gg = as.numeric(input$year))
+\end_layout
+
+\begin_layout Plain Layout
+
+    )
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  output$siteMap <- renderLeaflet({
+\end_layout
+
+\begin_layout Plain Layout
+
+    leaflet(data = goodSurfaceData) %>%
+\end_layout
+
+\begin_layout Plain Layout
+
+      addProviderTiles("Esri.WorldTopoMap") %>%
+\end_layout
+
+\begin_layout Plain Layout
+
+      addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, radius = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  observe({
+\end_layout
+
+\begin_layout Plain Layout
+
+    if(!is.null(input$siteMap_marker_click$id))
+\end_layout
+
+\begin_layout Plain Layout
+
+      output$sitePlot = renderPlot({
+\end_layout
+
+\begin_layout Plain Layout
+
+        plot.discharge(siteNumber = input$siteMap_marker_click$id)
+\end_layout
+
+\begin_layout Plain Layout
+
+      })
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  output$gwMap <- renderLeaflet({
+\end_layout
+
+\begin_layout Plain Layout
+
+    leaflet(data = gwSites) %>%
+\end_layout
+
+\begin_layout Plain Layout
+
+      addProviderTiles("Esri.WorldTopoMap") %>%
+\end_layout
+
+\begin_layout Plain Layout
+
+      addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                       color = "red", radius = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  observe({
+\end_layout
+
+\begin_layout Plain Layout
+
+    if(!is.null(input$gwMap_marker_click$id))
+\end_layout
+
+\begin_layout Plain Layout
+
+      output$GWPlot = renderPlot({
+\end_layout
+
+\begin_layout Plain Layout
+
+        gwPlot(input$gwMap_marker_click$id)
+\end_layout
+
+\begin_layout Plain Layout
+
+      })
+\end_layout
+
+\begin_layout Plain Layout
+
+  })
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(FALSE){
+\end_layout
+
+\begin_layout Plain Layout
+
+    theGWSites = reactiveValues()
+\end_layout
+
+\begin_layout Plain Layout
+
+    theGWSites$sites = 374004122092106 # character(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    # On gw-map click, if well isn't in the vector to be plotted, add it.
+\end_layout
+
+\begin_layout Plain Layout
+
+    observe({
+\end_layout
+
+\begin_layout Plain Layout
+
+      if(!is.null(input$gwMap_marker_click$id) &
+\end_layout
+
+\begin_layout Plain Layout
+
+           !input$gwMap_marker_click$id %in% theGWSites$sites) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        nextWell <- isolate(input$gwMap_marker_click$id)
+\end_layout
+
+\begin_layout Plain Layout
+
+        if(!nextWell %in% theGWSites$sites)
+\end_layout
+
+\begin_layout Plain Layout
+
+          isolate(theGWSites$sites <- c(theGWSites$sites, nextWell))
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    observe({
+\end_layout
+
+\begin_layout Plain Layout
+
+      if(input$clear > 0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        theGWSites$sites = 374004122092106  # ""
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    output$wellsInfo =
+\end_layout
+
+\begin_layout Plain Layout
+
+      renderPrint(cat("Plotting wells:", theGWSites$sites, sep = "
+\backslash
+n"))
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    output$GWPlot = renderPlot({
+\end_layout
+
+\begin_layout Plain Layout
+
+      gwPlot(theGWSites$sites)
+\end_layout
+
+\begin_layout Plain Layout
+
+    })
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+})
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -378,11 +1621,607 @@ functions.R
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-<<>>=
+<<echo = TRUE, eval = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# install packages and load packages ####
+\end_layout
+
+\begin_layout Plain Layout
+
+packages.list = c("shiny",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "maps",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "mapdata",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "maptools",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "Hmisc",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "ggplot2",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "reshape2",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "dataRetrieval",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "data.table",
+\end_layout
+
+\begin_layout Plain Layout
+
+                  "RColorBrewer")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for (p in packages.list) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (!(p %in% rownames(installed.packages())))
+\end_layout
+
+\begin_layout Plain Layout
+
+    install.packages(pkgs = p)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if (!("leaflet" %in% rownames(installed.packages()))) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  require("devtools")
+\end_layout
+
+\begin_layout Plain Layout
+
+  devtools::install_github("rstudio/leaflet")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+library(shiny)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(maps)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(leaflet)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(mapdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(maptools)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(Hmisc)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(ggplot2)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(reshape2)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(dataRetrieval)
+\end_layout
+
+\begin_layout Plain Layout
+
+library(data.table)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+latlong2county <- function(pointsDF, wantState = FALSE) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Taken verbetim from http://stackoverflow.com/questions/13316185
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Prepare SpatialPolygons object with one SpatialPolygon
+\end_layout
+
+\begin_layout Plain Layout
+
+  # per county
+\end_layout
+
+\begin_layout Plain Layout
+
+  counties <- map('county', fill=TRUE, col="transparent", plot=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+  IDs <- sapply(strsplit(counties$names, ":"), function(x) x[1])
+\end_layout
+
+\begin_layout Plain Layout
+
+  counties_sp <- map2SpatialPolygons(counties, IDs=IDs,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                     proj4string=CRS("+proj=longlat +datum=wgs84
+"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Convert pointsDF to a SpatialPoints object
+\end_layout
+
+\begin_layout Plain Layout
+
+  pointsSP <- SpatialPoints(pointsDF,
+\end_layout
+
+\begin_layout Plain Layout
+
+                            proj4string=CRS("+proj=longlat +datum=wgs84"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Use 'over' to get _indices_ of the Polygons object containing each point
+\end_layout
+
+\begin_layout Plain Layout
+
+  indices <- over(pointsSP, counties_sp)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # Return the county names of the Polygons object containing each point
+\end_layout
+
+\begin_layout Plain Layout
+
+  countyNames <- sapply(counties_sp@polygons, function(x) x@ID)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  county = strsplit(countyNames[indices], ",")[[1]]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(wantState) { county
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    county[2]
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+color.map = function(color.variable = 1L, year.map) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  # adapted from the example in the help doc of "map()" function.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # manipulate the water dataset so that we can match it to the map data.
+\end_layout
+
+\begin_layout Plain Layout
+
+  df.water.cal = water.consum.data(long = FALSE, year= year.map)
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(year.map == 2010){
+\end_layout
+
+\begin_layout Plain Layout
+
+  df.water.cal$cal.County = sapply(X = strsplit(x = levels(df.water.cal$County),
+ split = ' County'),
+\end_layout
+
+\begin_layout Plain Layout
+
+                                   FUN = function(x) x[[1]])
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    df.water.cal$cal.County=df.water.cal$County
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  df.water.cal$polyname = paste0("california,", tolower(df.water.cal$cal.County))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # define color buckets
+\end_layout
+
+\begin_layout Plain Layout
+
+  colors = c("#fee5d9",
+\end_layout
+
+\begin_layout Plain Layout
+
+             "#fcbba1",
+\end_layout
+
+\begin_layout Plain Layout
+
+             "#fc9272",
+\end_layout
+
+\begin_layout Plain Layout
+
+             "#fb6a4a",
+\end_layout
+
+\begin_layout Plain Layout
+
+             "#de2d26",
+\end_layout
+
+\begin_layout Plain Layout
+
+             "#a50f15")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (color.variable == 1L) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Percent, breaks
+ = c(0, 0.01, 1:5*0.02)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    leg.txt <- c("<1%", "1-2%", "2-4%", "4-6%", "6-8%", "8-10%")
+\end_layout
+
+\begin_layout Plain Layout
+
+    title.txt <- "County consumption:
+\backslash
+n% of California total"
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else if (color.variable == 2L) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    df.water.cal$colorBuckets <- as.numeric(cut(df.water.cal$Per.Cap, breaks =
+ c(0, 1, 5, 10, 20, 40)))
+\end_layout
+
+\begin_layout Plain Layout
+
+    leg.txt <- c("<1", "1-5", "5-10", "10-20", ">20")
+\end_layout
+
+\begin_layout Plain Layout
+
+    title.txt <- "Per Capita Consumption 
+\backslash
+n (Mgal/day/1000 people)"
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # align data with map definitions by (partial) matching state,county
+\end_layout
+
+\begin_layout Plain Layout
+
+  # names, which include multiple polygons for some counties
+\end_layout
+
+\begin_layout Plain Layout
+
+  colorsmatched <- df.water.cal$colorBuckets[
+\end_layout
+
+\begin_layout Plain Layout
+
+	match(map(database = "county", regions = "california", plot=FALSE)$names,df.wate
+r.cal$polyname)]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  # draw map
+\end_layout
+
+\begin_layout Plain Layout
+
+  map(database = "county", regions = "california", col = colors[colorsmatched],
+ fill = TRUE, 
+\end_layout
+
+\begin_layout Plain Layout
+
+	resolution = 0, lty = 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+  # the following lines might be useful if we draw the map for the whole
+ U.S.
+\end_layout
+
+\begin_layout Plain Layout
+
+  #   map("state", col = "white", fill = FALSE, add = TRUE, lty = 1, lwd
+ = 0.2,
+\end_layout
+
+\begin_layout Plain Layout
+
+  #       projection="polyconic")
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  #INCLUDING CITIES
+\end_layout
+
+\begin_layout Plain Layout
+
+  #data(us.cities)
+\end_layout
+
+\begin_layout Plain Layout
+
+  #cities <- c("^San Francisco", "^West Sacramento", "^Los Angeles", "^San
+ Diego", "^Fresno")
+\end_layout
+
+\begin_layout Plain Layout
+
+  #city.index <- sapply(cities , function(x){grep(x, us.cities[ ,1])})
+\end_layout
+
+\begin_layout Plain Layout
+
+  #map.cities(us.cities[city.index, ], country = "CA", 
+\end_layout
+
+\begin_layout Plain Layout
+
+	#label = TRUE, pch = 16, col = "black", cex = 1.5, font = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+  title(title.txt)
+\end_layout
+
+\begin_layout Plain Layout
+
+  legend("topright", leg.txt, fill = colors)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+simpleCap <- function(x) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  # From toupper() help file.
+\end_layout
+
+\begin_layout Plain Layout
+
+  s <- strsplit(x, " ")[[1]]
+\end_layout
+
+\begin_layout Plain Layout
+
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+\end_layout
+
+\begin_layout Plain Layout
+
+        sep="", collapse=" ")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \begin_layout Plain Layout
@@ -401,11 +2240,378 @@ plot.R
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-<<>>=
+<<echo = TRUE, eval = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#This Script will make the ggplot wrapper
+\end_layout
+
+\begin_layout Plain Layout
+
+# rm(list=ls())  # ML: It seems very dangerous to me to source files with
+ this command.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# We want to build this data.frame once, not on each call to gg.wrapper.
+\end_layout
+
+\begin_layout Plain Layout
+
+water.consum.data <- function (select.variables = NULL,
+\end_layout
+
+\begin_layout Plain Layout
+
+                               long,
+\end_layout
+
+\begin_layout Plain Layout
+
+                            
+\end_layout
+
+\begin_layout Plain Layout
+
+                               year=2010) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  df <- read.csv(file = paste0("./clean_data/ca_",year,".csv"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (!is.null(select.variables))
+\end_layout
+
+\begin_layout Plain Layout
+
+    df <- df[ , select.variables]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  #To use ggplot, I need to reshape the data from wide to long.
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (long) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    df.long <- melt(df, id = "County")
+\end_layout
+
+\begin_layout Plain Layout
+
+    names(df.long)[2:3] <- c("Source","Water")
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(df.long)
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return (df)
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+cc = rep("NULL", 20)
+\end_layout
+
+\begin_layout Plain Layout
+
+cc[3] = "character"
+\end_layout
+
+\begin_layout Plain Layout
+
+counties = tolower(read.csv("./clean_data//ca_2010.csv", colClasses = cc)$County)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# debugonce(gg.wrapper)
+\end_layout
+
+\begin_layout Plain Layout
+
+# gg.wrapper("imperial", "2000")
+\end_layout
+
+\begin_layout Plain Layout
+
+#plot
+\end_layout
+
+\begin_layout Plain Layout
+
+gg.wrapper <- function(county.name, year.gg){
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  theDF <- water.consum.data(
+\end_layout
+
+\begin_layout Plain Layout
+
+    select.variables = c("County", "Public.Supply", "Domestic.Self", "Industry",
+\end_layout
+
+\begin_layout Plain Layout
+
+                         "Irrigation", "Livestock",
+\end_layout
+
+\begin_layout Plain Layout
+
+                         "Aquaculture", "Mining","Thermoelectric"),
+\end_layout
+
+\begin_layout Plain Layout
+
+    long = TRUE,
+\end_layout
+
+\begin_layout Plain Layout
+
+    year = year.gg)
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  plotDF = theDF[grep(pattern = county.name, x = tolower(theDF$County)),]
+\end_layout
+
+\begin_layout Plain Layout
+
+  plotDF$Water = plotDF$Water * .325851 * 365.25 # MGal/day -> AF/year
+\end_layout
+
+\begin_layout Plain Layout
+
+#  plotDF = plotDF[plotDF$Water > 0, ]
+\end_layout
+
+\begin_layout Plain Layout
+
+  plotDF$lab = sprintf("%1.0f", plotDF$Water)
+\end_layout
+
+\begin_layout Plain Layout
+
+  plotDF$Source = factor(plotDF$Source, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         levels = plotDF$Source[order(plotDF$Water)],
+\end_layout
+
+\begin_layout Plain Layout
+
+                         ordered = TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+  #First I will subsample the data.
+  Some data is a double count.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  #For example Ir=Ir.C+Ir.G (i.e.
+ Irrigation = Irrigation Crops + Irrigation Golf)
+\end_layout
+
+\begin_layout Plain Layout
+
+  col = brewer.pal(8, "Set1")
+\end_layout
+
+\begin_layout Plain Layout
+
+  names(col) = c("Public.Supply", "Domestic.Self", "Industry",
+\end_layout
+
+\begin_layout Plain Layout
+
+                 "Irrigation", "Livestock",
+\end_layout
+
+\begin_layout Plain Layout
+
+                 "Aquaculture", "Mining","Thermoelectric")
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  plot.water <- ggplot(data = plotDF, aes(x=Source,y=Water, fill =Source
+ ))+
+\end_layout
+
+\begin_layout Plain Layout
+
+    geom_bar(stat="identity")+
+\end_layout
+
+\begin_layout Plain Layout
+
+    theme_bw()+
+\end_layout
+
+\begin_layout Plain Layout
+
+#    scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+
+\end_layout
+
+\begin_layout Plain Layout
+
+    scale_x_discrete("") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    scale_y_log10("Fresh Water Use (acre-feet/year)") +
+\end_layout
+
+\begin_layout Plain Layout
+
+#                  limits = c(1, max(theDF$Water) + .05 * max(theDF$Water)))
+ +
+\end_layout
+
+\begin_layout Plain Layout
+
+  scale_fill_manual(values = col) +
+\end_layout
+
+\begin_layout Plain Layout
+
+  geom_text(aes(label = lab, y = ifelse(Water < 2, 1, Water / 2))) +
+\end_layout
+
+\begin_layout Plain Layout
+
+    coord_flip()+
+\end_layout
+
+\begin_layout Plain Layout
+
+    guides(fill=FALSE)+
+\end_layout
+
+\begin_layout Plain Layout
+
+    ggtitle(paste(simpleCap(county.name), "County"))+
+\end_layout
+
+\begin_layout Plain Layout
+
+    theme(plot.title = element_text(size=18, face="bold"), 
+\end_layout
+
+\begin_layout Plain Layout
+
+		#Don't adjust text size.
+ If you increase it will cut off San Luis Obispo County
+\end_layout
+
+\begin_layout Plain Layout
+
+          axis.text.y = element_text(size = 15),
+\end_layout
+
+\begin_layout Plain Layout
+
+          axis.text.x = element_text(size = 12),
+\end_layout
+
+\begin_layout Plain Layout
+
+          axis.title.x = element_text(size = 15))
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(plot.water)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
 \end_layout
 
 \begin_layout Plain Layout
@@ -424,11 +2630,434 @@ USGSplot.R
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-<<>>=
+<<echo = TRUE, eval = FALSE>>=plot.USGS = function(siteNumber) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  plot = try(plot.discharge(siteNumber = siteNumber))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  require(ggplot2)
+\end_layout
+
+\begin_layout Plain Layout
+
+  null.plot = qplot(x = 0, y = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if ((class(plot)[[1]] != "try-error")) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(list(0, plot))
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(list(1, null.plot))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plot.discharge.2 = function(siteNumber,
+\end_layout
+
+\begin_layout Plain Layout
+
+                            startDate = NULL,
+\end_layout
+
+\begin_layout Plain Layout
+
+                            endDate = NULL) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  require(dataRetrieval)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  surfaceData = try(readNWISmeas(siteNumbers = siteNumber))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  stopifnot("measurement_dt" %in% names(surfaceData))
+\end_layout
+
+\begin_layout Plain Layout
+
+  stopifnot("discharge_va" %in% names(surfaceData))
+\end_layout
+
+\begin_layout Plain Layout
+
+  stopifnot("gage_height_va" %in% names(surfaceData))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  siteInfo = attr(surfaceData, "siteInfo")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (!is.null(startDate))
+\end_layout
+
+\begin_layout Plain Layout
+
+    surfaceData = surfaceData[surfaceData$measurement_dt >= as.POSIXct(startDate)
+, ]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (!is.null(endDate))
+\end_layout
+
+\begin_layout Plain Layout
+
+    surfaceData = surfaceData[surfaceData$measurement_dt <= as.POSIXct(endDate),
+ ]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  require(ggplot2)
+\end_layout
+
+\begin_layout Plain Layout
+
+  plot = ggplot(data = surfaceData, aes(x = measurement_dt, y = discharge_va))
+ +
+\end_layout
+
+\begin_layout Plain Layout
+
+    geom_point() +
+\end_layout
+
+\begin_layout Plain Layout
+
+    geom_line() +
+\end_layout
+
+\begin_layout Plain Layout
+
+    xlab("Date") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    ylab("Discharge, cubic feet per second") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    ggtitle(siteInfo$station_nm)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(plot)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plot.discharge = function(siteNumber,
+\end_layout
+
+\begin_layout Plain Layout
+
+                          parameterCd = "00060") {
+\end_layout
+
+\begin_layout Plain Layout
+
+  require(dataRetrieval)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  data = readNWISdv(siteNumber, startDate = "2011-10-01",
+\end_layout
+
+\begin_layout Plain Layout
+
+                    parameterCd)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  data = renameNWISColumns(data)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(!"Flow" %in% names(data))
+\end_layout
+
+\begin_layout Plain Layout
+
+    stop("Sorry, USGS doesn't have flow data for that station.")
+\end_layout
+
+\begin_layout Plain Layout
+
+     
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  variableInfo = attr(data, "variableInfo")
+\end_layout
+
+\begin_layout Plain Layout
+
+  siteInfo = attr(data, "siteInfo")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  require(ggplot2)
+\end_layout
+
+\begin_layout Plain Layout
+
+ ggplot(data = data, aes(x = Date, y = Flow)) +
+\end_layout
+
+\begin_layout Plain Layout
+
+    geom_line() +
+\end_layout
+
+\begin_layout Plain Layout
+
+    xlab("Date") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    ylab(variableInfo$parameter_desc) +
+\end_layout
+
+\begin_layout Plain Layout
+
+    theme_bw() +
+\end_layout
+
+\begin_layout Plain Layout
+
+    scale_y_log10() +
+\end_layout
+
+\begin_layout Plain Layout
+
+    ggtitle(paste0("Daily warter discharge at: ", siteInfo$station_nm))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#  return(plot)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+gwPlot = function(siteNum)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  ggplot(gwLevels[gwLevels$siteNumber == siteNum, ], 
+\end_layout
+
+\begin_layout Plain Layout
+
+         aes(x = date, 
+\end_layout
+
+\begin_layout Plain Layout
+
+#             y = log10(level))) +
+\end_layout
+
+\begin_layout Plain Layout
+
+             y = level)) +
+\end_layout
+
+\begin_layout Plain Layout
+
+             # color = siteNumber)) +
+\end_layout
+
+\begin_layout Plain Layout
+
+    scale_y_reverse() + 
+\end_layout
+
+\begin_layout Plain Layout
+
+    scale_x_date(limits = c(as.Date("2011-10-01"), Sys.Date())) +
+\end_layout
+
+\begin_layout Plain Layout
+
+    geom_line() +
+\end_layout
+
+\begin_layout Plain Layout
+
+    geom_point() +
+\end_layout
+
+\begin_layout Plain Layout
+
+#    ylab("Depth, log10(feet)") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    ylab("Depth (feet)") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    xlab("Date") +
+\end_layout
+
+\begin_layout Plain Layout
+
+    theme_bw()
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -447,11 +3076,31 @@ readUSGSData.R
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-<<>>=
+<<echo = TRUE, eval = FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+sites = readRDS("clean_data/allSites.RDS")
+\end_layout
+
+\begin_layout Plain Layout
+
+goodSurfaceData = readRDS("clean_data/goodSurfaceSites.RDS")
+\end_layout
+
+\begin_layout Plain Layout
+
+gwLevels = readRDS("clean_data/gwLevels.RDS") 
+\end_layout
+
+\begin_layout Plain Layout
+
+gwSites = sites[sites$siteNumber %in% gwLevels$siteNumber, ]
 \end_layout
 
 \begin_layout Plain Layout

@@ -184,7 +184,7 @@ Three distinct visualization are generated within the project.
  Finally, the last visualization depicts the ground water depth of wells.
  In what follows, we will discuss each of these visualization separately
  within sections 2, 3 and 4.
- All R scripts are contained in the Appendix below.
+ 
 \end_layout
 
 \begin_layout Section
@@ -229,7 +229,7 @@ Since the data set for water consumption is small, we store all the data
 
 \begin_layout Standard
 The code to generate this visualization is contained the in R scripts plot.R
- and functions.R in the Appendix.
+ and functions.R.
  The color.map function within functions.R generates the plot of California.
  This is essentially a wrapper of the map function from R's maps package.
  Upon clicking on a county, a graph of the consumption by sector for that
@@ -464,7 +464,7 @@ shinyUI(
 
 \begin_layout Plain Layout
 
-      h1("Water use"),
+      h1("Water uses"),
 \end_layout
 
 \begin_layout Plain Layout
@@ -533,12 +533,8 @@ shinyUI(
 
 \begin_layout Plain Layout
 
-               helpText("Click on a county for consumption by 
-\end_layout
-
-\begin_layout Plain Layout
-
-					sector for that county in the selected year."),
+               helpText("Click on a county for consumption by sector for
+ that county in the selected year."),
 \end_layout
 
 \begin_layout Plain Layout
@@ -975,7 +971,12 @@ ng
 
 \begin_layout Plain Layout
 
-      plotOutput("GWPlot")
+      plotOutput("GWPlot"),
+\end_layout
+
+\begin_layout Plain Layout
+
+      actionButton("clear", "Clear plot, except last-clicked well")
 \end_layout
 
 \begin_layout Plain Layout
@@ -2097,13 +2098,13 @@ n (Mgal/day/1000 people)"
 
 \begin_layout Plain Layout
 
-  colorsmatched <- df.water.cal$colorBuckets[
+  colorsmatched <- df.water.cal$colorBuckets[match(map(database = "county",
+ regions = "california", plot=FALSE)$names,
 \end_layout
 
 \begin_layout Plain Layout
 
-	match(map(database = "county", regions = "california", plot=FALSE)$names,df.wate
-r.cal$polyname)]
+                                                   df.water.cal$polyname)]
 \end_layout
 
 \begin_layout Plain Layout
@@ -2118,12 +2119,12 @@ r.cal$polyname)]
 \begin_layout Plain Layout
 
   map(database = "county", regions = "california", col = colors[colorsmatched],
- fill = TRUE, 
+ fill = TRUE, resolution = 0,
 \end_layout
 
 \begin_layout Plain Layout
 
-	resolution = 0, lty = 1)
+      lty = 1)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2171,12 +2172,8 @@ r.cal$polyname)]
 
 \begin_layout Plain Layout
 
-  #map.cities(us.cities[city.index, ], country = "CA", 
-\end_layout
-
-\begin_layout Plain Layout
-
-	#label = TRUE, pch = 16, col = "black", cex = 1.5, font = 2)
+  #map.cities(us.cities[city.index, ], country = "CA", label = TRUE, pch =
+ 16, col = "black", cex = 1.5, font = 2)
 \end_layout
 
 \begin_layout Plain Layout
@@ -2486,12 +2483,7 @@ gg.wrapper <- function(county.name, year.gg){
 
   #First I will subsample the data.
   Some data is a double count.
-  
-\end_layout
-
-\begin_layout Plain Layout
-
-  #For example Ir=Ir.C+Ir.G (i.e.
+  For example Ir=Ir.C+Ir.G (i.e.
  Irrigation = Irrigation Crops + Irrigation Golf)
 \end_layout
 
@@ -2584,12 +2576,8 @@ gg.wrapper <- function(county.name, year.gg){
 
 \begin_layout Plain Layout
 
-    theme(plot.title = element_text(size=18, face="bold"), 
-\end_layout
-
-\begin_layout Plain Layout
-
-		#Don't adjust text size.
+    theme(plot.title = element_text(size=18, face="bold"), #Don't adjust
+ text size.
  If you increase it will cut off San Luis Obispo County
 \end_layout
 
@@ -3099,12 +3087,8 @@ goodSurfaceData = readRDS("clean_data/goodSurfaceSites.RDS")
 
 \begin_layout Plain Layout
 
-gwLevels = readRDS("clean_data/gwLevels.RDS") 
-\end_layout
-
-\begin_layout Plain Layout
-
-gwSites = sites[sites$siteNumber %in% gwLevels$siteNumber, ]
+gwLevels = readRDS("clean_data/gwLevels.RDS") gwSites = sites[sites$siteNumber
+ %in% gwLevels$siteNumber, ]
 \end_layout
 
 \begin_layout Plain Layout
