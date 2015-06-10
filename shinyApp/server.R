@@ -82,7 +82,8 @@ shinyServer(function(input, output) {
 
   # On gw-map click, if well isn't in the vector to be plotted, add it.
   observe({
-    if(!input$gwMap_marker_click$id %in% theGWSites$sites) {
+    if(!is.null(input$gwMap_marker_click$id) &
+         !input$gwMap_marker_click$id %in% theGWSites$sites) {
       nextWell <- isolate(input$gwMap_marker_click$id)
       if(!nextWell %in% theGWSites$sites)
         isolate(theGWSites$sites <- c(theGWSites$sites, nextWell))
