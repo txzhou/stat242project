@@ -24,8 +24,8 @@ shinyServer(function(input, output) {
   output$badCounty <- renderText({
     if(
       theCounty() == "none" |
-        is.na(theCounty())  # |
-      #!any( grepl(theCounty(), tolower(df$County)) )
+        is.na(theCounty())   |
+        !any( grepl(theCounty(), counties) )
     ) {
       return(1)
     } else {
