@@ -55,9 +55,7 @@ shinyServer(function(input, output) {
 
   output$siteMap <- renderLeaflet({
     leaflet(data = goodSurfaceData) %>%
-      addProviderTiles("Stamen.TonerLite") %>%
-      addProviderTiles("MapQuestOpen.Aerial",
-                       options = providerTileOptions(opacity = .5)) %>%
+      addProviderTiles("Esri.WorldTopoMap") %>%
       addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, radius = 1,
                        popup = ~siteName)
   })
@@ -74,9 +72,7 @@ shinyServer(function(input, output) {
   
   output$gwMap <- renderLeaflet({
     leaflet(data = gwSites) %>%
-      addProviderTiles("Stamen.TonerLite") %>%
-      addProviderTiles("MapQuestOpen.Aerial",
-                       options = providerTileOptions(opacity = .5)) %>%
+      addProviderTiles("Esri.WorldTopoMap") %>%
       addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, 
                        color = "red", radius = 1, popup = ~siteNumber)
   })
