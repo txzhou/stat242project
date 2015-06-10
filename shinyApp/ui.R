@@ -17,6 +17,7 @@ shinyUI(
     
     tabPanel(
       "Use by county",
+      h1("Water uses"),
       
       fluidRow(
         column(5,
@@ -57,6 +58,7 @@ shinyUI(
     
     tabPanel(
       "Surface water flow",
+      h1("Surface water"),
       
       fluidRow(
         column(5, leafletOutput("siteMap")),
@@ -85,6 +87,7 @@ shinyUI(
     
     tabPanel(
       "Groundwater levels",
+      h1("Groundwater"),
       
       fluidRow(
         column(5, leafletOutput("gwMap")),

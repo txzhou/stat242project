@@ -27,4 +27,10 @@ dischargeData$site_tp_cd[!grepl("ST", dischargeData$site_tp_cd)]
 # Others are lakes, and diversion ditches
 
 goodSurfaceData = surfaceSites[surfaceSites$siteNumber %in% dischargeData$site_no, ]
+
+activeSites = fread("../raw_data/currentStreams.txt")[-1, ]
+goodSurfaceData = goodSurfaceData[goodSurfaceData$siteNumber %in%
+                                    activeSites$site_no, ]
+
 saveRDS(goodSurfaceData, "clean_data/goodSurfaceSites.RDS")
+
