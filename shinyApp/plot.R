@@ -22,8 +22,8 @@ water.consum.data <- function (select.variables = NULL,
   }
 }
 
-
-
+# debugonce(gg.wrapper)
+# gg.wrapper("imperial", "2000")
 #plot
 gg.wrapper <- function(county.name, year.gg){
   
@@ -32,17 +32,34 @@ gg.wrapper <- function(county.name, year.gg){
                          "Irrigation", "Livestock",
                          "Aquaculture", "Mining","Thermoelectric"),
     long = TRUE,
-    year = year.gg)  
-  #First I will subsample the data.  Some data is a double count.  For example Ir=Ir.C+Ir.G (i.e. Irrigation = Irrigation Crops + Irrigation Golf)
+    year = year.gg)
   
-  plot.water <- ggplot(data=theDF[grep(pattern = county.name, x = tolower(theDF$County)),], aes(x=Source,y=Water, fill =Source ))+
+  plotDF = theDF[grep(pattern = county.name, x = tolower(theDF$County)),]
+  plotDF$Water = plotDF$Water * .325851 * 365.25 # MGal/day -> AF/year
+#  plotDF = plotDF[plotDF$Water > 0, ]
+  plotDF$lab = sprintf("%1.0f", plotDF$Water)
+  plotDF$Source = factor(plotDF$Source, 
+                         levels = plotDF$Source[order(plotDF$Water)],
+                         ordered = TRUE)
+  #First I will subsample the data.  Some data is a double count.  For example Ir=Ir.C+Ir.G (i.e. Irrigation = Irrigation Crops + Irrigation Golf)
+  col = brewer.pal(8, "Set1")
+  names(col) = c("Public.Supply", "Domestic.Self", "Industry",
+                 "Irrigation", "Livestock",
+                 "Aquaculture", "Mining","Thermoelectric")
+  
+  plot.water <- ggplot(data = plotDF, aes(x=Source,y=Water, fill =Source ))+
     geom_bar(stat="identity")+
     theme_bw()+
-    scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+
-    scale_x_discrete("",labels=c("Public Supply", "Domestic-Self", "Industry", "Irrigation", "Livestock", "Aquaculture", "Mining","Thermoelectric"))+
+#    scale_y_continuous("Total Fresh Water Withdrawn (Mgal/day)")+
+#    scale_x_discrete("",labels=c("Public Supply", "Domestic-Self", "Industry", "Irrigation", "Livestock", "Aquaculture", "Mining","Thermoelectric"))+
+    scale_y_log10("Fresh Water Withdrawn (acre-feet/year)") +
+#                  limits = c(1, max(theDF$Water) + .05 * max(theDF$Water))) +
+  scale_fill_manual(values = col) +
+  geom_text(aes(label = lab, y = ifelse(Water < 2, 1, Water / 2))) +
     coord_flip()+
     guides(fill=FALSE)+
-    ggtitle(paste("Consumption of Water by Sector:", simpleCap(county.name)))+
+    ggtitle(paste("Consumption of Water by Sector for",
+                  simpleCap(county.name), "County"))+
     theme(plot.title = element_text(size=18, face="bold"), #Don't adjust text size. If you increase it will cut off San Luis Obispo County
           axis.text.y = element_text(size = 15),
           axis.text.x = element_text(size = 12),

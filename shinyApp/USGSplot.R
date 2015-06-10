@@ -46,12 +46,14 @@ plot.discharge = function(siteNumber,
                           parameterCd = "00060") {
   require(dataRetrieval)
 
-  data = readNWISdv(siteNumber,
+  data = readNWISdv(siteNumber, startDate = "2011-10-01",
                     parameterCd)
 
   data = renameNWISColumns(data)
 
-  stopifnot("Flow" %in% names(data))
+  if(!"Flow" %in% names(data))
+    stop("Sorry, USGS doesn't have flow data for that station.")
+     
 
   variableInfo = attr(data, "variableInfo")
   siteInfo = attr(data, "siteInfo")
@@ -72,15 +74,15 @@ gwPlot = function(siteNum)
 {
   ggplot(gwLevels[gwLevels$siteNumber %in% siteNum, ], 
          aes(x = date, 
-             # y = log10(level), 
-             y = level,
+             y = log10(level), 
+#             y = level,
              color = siteNumber)) +
     scale_y_reverse() + 
     scale_x_date(limits = c(as.Date("2011-10-01"), Sys.Date())) +
     geom_line() +
     geom_point() +
-#    ylab("Depth, log10(feet)") +
-    ylab("Depth (feet)") +
+    ylab("Depth, log10(feet)") +
+#    ylab("Depth (feet)") +
     xlab("Date") +
     theme_bw()
 }

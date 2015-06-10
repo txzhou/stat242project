@@ -7,7 +7,8 @@ packages.list = c("shiny",
                   "ggplot2",
                   "reshape2",
                   "dataRetrieval",
-                  "data.table")
+                  "data.table",
+                  "RColorBrewer")
 
 for (p in packages.list) {
   if (!(p %in% rownames(installed.packages())))
