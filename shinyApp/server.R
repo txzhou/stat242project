@@ -53,8 +53,6 @@ shinyServer(function(input, output) {
       gg.wrapper(county.name = theCounty(), year.gg = as.numeric(input$year))
     )
 
-
-  # Spatial pattern is weird; sites do exist in CV. Address this later.
   output$siteMap <- renderLeaflet({
     leaflet(data = goodSurfaceData) %>%
       addProviderTiles("Stamen.TonerLite") %>%
@@ -71,4 +69,16 @@ shinyServer(function(input, output) {
     plot.discharge(siteNumber = input$siteMap_marker_click$id)
   })
 
+  output$gwMap <- renderLeaflet({
+    leaflet(data = gwSites) %>%
+      addProviderTiles("Stamen.TonerLite") %>%
+      addProviderTiles("MapQuestOpen.Aerial",
+                       options = providerTileOptions(opacity = .5)) %>%
+      addCircleMarkers(~long, ~lat, layerId = ~ siteNumber, 
+                       color = "red", radius = 1)
+  })
+  
+  output$GWPlot = renderPlot({
+    gwPlot(input$gwMap_marker_click$id)
+  })
 })
