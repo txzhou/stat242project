@@ -1,0 +1,468 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing double
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Project: Visualization of California Water
+\end_layout
+
+\begin_layout Standard
+\align center
+Git Repository: https://z109620@bitbucket.org/z109620/project.git
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Visualization: 
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Jacob Humber, Michael Levy and Tianxia Zhou
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+California has been experiencing a drought since the onset of 2012.
+ Over this time LIST BAD SHIT THAT HAPPENED.
+ In an effort to convey the magnitude of this persistent drought the United
+ States Geological Survey (USGS) generated an interesting visualization
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The USGS visualization: http://cida.usgs.gov/ca_drought/
+\end_layout
+
+\end_inset
+
+.
+ While this visualization helps to illuminate the magnitude of the California
+ drought, it focuses almost exclusively on surface water reservoir levels.
+ Surface water reservoir levels only tell part of the story of the California
+ drought.
+ Clearly, an thorough understanding of California water consumption, stream
+ flows, the depth of ground water wells are all important.
+ The current project, therefore, will generate visualizations
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Our visualization: INSERT THE ADDRESS TO OUR VISUALIZATION
+\end_layout
+
+\end_inset
+
+ which will depict each of these aforementioned water metrics and is therefore
+ meant to compliment the existing USGS visualization.
+ 
+\end_layout
+
+\begin_layout Standard
+All visualizations within the project are generated with the R package shiny.
+ For a proficient R user utilizing the shiny package is relatively straightforwa
+rd.
+ At a minimum a shiny application consists of a user-interface (ui.R) script
+ for the front-end and a server script (server.R) for the back-end.
+ Each of these scripts are written in R.
+ Consequently, the shiny packages provides some of the elegance of JavaScript
+ without needing to know HTML, CSS or even JavaScript itself! 
+\end_layout
+
+\begin_layout Standard
+Three distinct visualization are generated within the project.
+ The first depicts California water consumption by county and sector.
+ The next depicts discharge rates of streams and rivers.
+ Finally, the last visualization depicts the ground water depth of wells.
+ In what follows, we will discuss each of these visualization separately
+ within sections 2, 3 and 4.
+ 
+\end_layout
+
+\begin_layout Section
+Water Consumption
+\end_layout
+
+\begin_layout Standard
+As water becomes scare, it is essential to understand both the industries
+ as well as the areas within California that consume the most water.
+ These sectors and areas are those most likely to bare the brunt of the
+ hardship that is the California drought.
+\end_layout
+
+\begin_layout Standard
+The USGS visualization does provides a pie chart of water consumption by
+ industry.
+ However, in the current project we expand this by depicting the water consumpti
+on by county by year for 2000, 2005 and 2010
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Data source: http://water.usgs.gov/watuse/data/
+\end_layout
+
+\end_inset
+
+.
+ Unfortunately, the 2015 data is not currently available.
+ Additionally upon a click of a county, a graph appears which displays the
+ water consumption by sector for that county.
+ 
+\end_layout
+
+\begin_layout Standard
+Since the data set for water consumption is small, we store all the data
+ remotely on our Git Hub page.
+ Intentionally we wanted to host our shiny application on shinyapps.io, however,
+ the only way to host data on this website is to pay $30 a month, which
+ is a lot of money for a group of graduate students.
+\end_layout
+
+\begin_layout Standard
+The code to generate this visualization is contained the in R scripts plot.R
+ and functions.R.
+ The color.map function within functions.R generates the plot of California.
+ This is essentially a wrapper of the map function from R's maps package.
+ Upon clicking on a county, a graph of the consumption by sector for that
+ county is generated with the ggplot wrapper gg.wrapper.
+ Notice that when a users clicks the map, longitude and latitude coordinates
+ are passed to server.R, however we don't want to pass longitude and latitude
+ coordinates to the gg.wrapper, we want to pass a county name.
+ Consequently, we must convert these longitude and latitude coordinates
+ to a county.
+ This is done with the latlong2county function within functions.R
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The latlong2county function draws heavily from the following StackOverflow
+ thread: http://stackoverflow.com/questions/13316185 
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Stream flow
+\end_layout
+
+\begin_layout Standard
+In the current context stream flow is measured by the discharge rate.
+ The discharge rate is the volume of water moving down a stream or river
+ per unit of time, in our context the discharge rate is measured in cubic
+ feet per second.
+\end_layout
+
+\begin_layout Standard
+The USGS visualization implicitly depicts stream flows insofar as the different
+ drought categories within their visualization - No Drought, Abnormally
+ Dri, Moderate Drought, Severe Drough, Extreme Drought and Exceptional Drought
+ - are defined by varying stream flows.
+ However, it is not possible to obtain, from their visualization, the actual
+ stream flow from participial streams.
+ Consequently, our visualization depicts the discharge rate read from each
+ surface gauge monitored by the USGS
+\end_layout
+
+\begin_layout Standard
+In this context we have utilized the leafet function in the R package of
+ the same name to draw our map of California, see the R script server.R.
+ Like D3, leafet is a JavaScript library.
+ The leafet package, which is similar to shiny in this regard, introduces
+ some of the functionally of JavaScript without the need to know how to
+ write JavaScript code.
+ The main reason for invoking leafet here is that this function makes it
+ straightforward to create a map which the user can zoom in and out on.
+ Given the numerous observation, to insure clarity, it was necessary that
+ user have the ability to zoom.
+ Another interesting feature of this visualization is that unlike the visualizat
+ion of water consumption, the data on discharge rates are not stored remotely
+ on Git Hub.
+ This data is expansive and consequently we opted to load data upon a click.
+ This is made possible by the R package dataRetrieval.
+ This packages allows users to query the expansive hydrological data provided
+ by USGS.
+ Consequently, when a user clicks a site, the corresponding site number
+ is passed to dataRetrieval.
+ The data is in turn passed to plot wrapper functions in USGSplot.R.
+\end_layout
+
+\begin_layout Section
+Ground Water
+\end_layout
+
+\begin_layout Standard
+Ground water wells are not currently depicted within the USGS visualization.
+ Despite this fact, ground water is essential to California's water supply
+ as it comprises 30% of the California water supply.
+ Consequently, we provided a visualization of water well depth for all wells
+ currently monitored by the USGS.
+\end_layout
+
+\begin_layout Standard
+The approach used to generate the ground water visualization is very similar
+ to the stream flow visualization.
+ As above both, the leafet and dataRetrieval packages are utilized.
+ However, one additional feature of this visualization is that for each
+ successive on a well sites the well depth accumulate on the plot.
+ This is helpful for comparisons across wells.
+ The action bottom below the plot, clears all but the last plot.
+ 
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+This project compliments the USGS visualization.
+ It does so by visualizing water consumption, stream flows and ground water
+ elevation.
+ In this project we opt to use the R shiny package.
+ Clearly, this assignment could have been done using JavaScript, however,
+ the shiny is capable to generate some very nice looking graphics.
+ A fun summer project would be do redo some of this assignment in JavaScript
+ to understand the difference between these two approaches.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+\noindent
+Appendix
+\end_layout
+
+\begin_layout Standard
+ui.R
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+server.R
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+functions.R
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+plot.R
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+USGSplot.R
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+readUSGSData.R
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
