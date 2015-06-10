@@ -1,29 +1,34 @@
 plot.USGS = function(siteNumber) {
-  plot1 = try(plot.discharge(siteNumber = siteNumber))
-  cat(class(plot1))
-  if ((class(plot1)[[1]] != "try-error")) {
-    return(plot1)
-  }
+  plot = try(plot.discharge(siteNumber = siteNumber))
 
-  plot2 = try(plot.surface(siteNumber = siteNumber))
-  cat(class(plot2))
-  return(plot2)
+  require(ggplot2)
+  null.plot = qplot(x = 0, y = 0)
+
+  if ((class(plot)[[1]] != "try-error")) {
+    return(list(0, plot))
+  } else {
+    return(list(1, null.plot))
+  }
 }
 
-plot.surface = function(siteNumber = "11454000",
-                               startDate = "2010-01-01",
-                               endDate = "2010-12-31") {
+plot.discharge.2 = function(siteNumber,
+                            startDate = NULL,
+                            endDate = NULL) {
   require(dataRetrieval)
 
-  surfaceData = readNWISmeas(siteNumber)
+  surfaceData = try(readNWISmeas(siteNumbers = siteNumber))
+
   stopifnot("measurement_dt" %in% names(surfaceData))
   stopifnot("discharge_va" %in% names(surfaceData))
   stopifnot("gage_height_va" %in% names(surfaceData))
 
   siteInfo = attr(surfaceData, "siteInfo")
 
-  surfaceData = surfaceData[surfaceData$measurement_dt >= as.POSIXct(startDate) &
-                              surfaceData$measurement_dt <= as.POSIXct(endDate), ]
+  if (!is.null(startDate))
+    surfaceData = surfaceData[surfaceData$measurement_dt >= as.POSIXct(startDate), ]
+
+  if (!is.null(endDate))
+    surfaceData = surfaceData[surfaceData$measurement_dt <= as.POSIXct(endDate), ]
 
   require(ggplot2)
   plot = ggplot(data = surfaceData, aes(x = measurement_dt, y = discharge_va)) +
@@ -37,7 +42,7 @@ plot.surface = function(siteNumber = "11454000",
 }
 
 
-plot.discharge = function(siteNumber = "09423350",
+plot.discharge = function(siteNumber,
                           parameterCd = "00060") {
   require(dataRetrieval)
 
